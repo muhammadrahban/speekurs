@@ -459,37 +459,8 @@
             //     }
             // });
 
-            $('.chosenHeartIcon').on('click', function(e) {
-                var obj=$(this);
-                e.preventDefault();
-                @guest
-                    window.location.href = "{{route('login')}}";
-                @else
-                    var src_active = '{{URL("/")}}/image/icon/heart_active.png';
-                    var src_noactive = '{{URL("/")}}/image/icon/heart.png';
-                    var postid=$(obj).attr('data-post-id');
-                    $.ajax({
-                        url: "{{URL('/')}}/setLike",
-                        type: 'post',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            'postid':postid
-                        },
-                        success: function(data){
-                            var response=data[1].split(":")[0];
-                            var count=data[1].split(":")[1];
-                            if(response=='liked'){
-                                $(obj).attr('src', '{{URL("/")}}/image/icon/heart_active.png');
-                                $('#count_'+postid).text(count);
-                            }else if(response=='dislike'){
-                                $(obj).attr('src', '{{URL("/")}}/image/icon/heart.png');
-                                $('#count_'+postid).text(count);
-                            }
-                        }
 
-                    });
-                @endguest
-            });
+           
 
             $('.chosenBookmarkIcon').on('click', function(e) {
                 e.preventDefault();
@@ -618,6 +589,37 @@
 
                             $("#card_record").append(tr_str);
                         }
+                        $('.chosenHeartIcon').on('click', function(e) {
+                            e.preventDefault();
+                            var obj=$(this);
+                            @guest
+                                window.location.href = "{{route('login')}}";
+                            @else
+                                var src_active = '{{URL("/")}}/image/icon/heart_active.png';
+                                var src_noactive = '{{URL("/")}}/image/icon/heart.png';
+                                var postid=$(obj).attr('data-post-id');
+                                $.ajax({
+                                    url: "{{URL('/')}}/setLike",
+                                    type: 'post',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        'postid':postid
+                                    },
+                                    success: function(data){
+                                        var response=data[1].split(":")[0];
+                                        var count=data[1].split(":")[1];
+                                        if(response=='liked'){
+                                            $(obj).attr('src', '{{URL("/")}}/image/icon/heart_active.png');
+                                            $('#count_'+postid).text(count);
+                                        }else if(response=='dislike'){
+                                            $(obj).attr('src', '{{URL("/")}}/image/icon/heart.png');
+                                            $('#count_'+postid).text(count);
+                                        }
+                                    }
+
+                                });
+                            @endguest
+                        });
                     }else{
                         var tr_str = "<tr>" +
                             "<td align='center' colspan='4'>No record found.</td>" +

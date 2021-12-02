@@ -11,12 +11,12 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        // factory(App\Post::class, 50)->create()->each(function($post){
-        //     $post->save();
-        // });
-
-        factory(App\Like::class, 50)->create()->each(function($like){
-            $like->save();
+        factory(App\Post::class, 50)->create()->each(function($post){
+            $post->save();
         });
+
+        // factory(App\Like::class, 50)->create()->each(function($like){
+        //     $like->save();
+        // });
     }
 }
