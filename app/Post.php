@@ -28,7 +28,7 @@ class Post extends Model
     }
 
     function bookmark(){
-        return $this->BelongsTo(Bookmark::class, 'post_id', 'id');
+        return $this->hasMany(Bookmark::class, 'post_id', 'id');
     }
 
     // function post(){

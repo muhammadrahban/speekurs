@@ -462,36 +462,7 @@
 
            
 
-            $('.chosenBookmarkIcon').on('click', function(e) {
-                e.preventDefault();
-                @guest
-                    window.location.href = "{{route('login')}}";
-                @else
-                    var bookmark_active = '{{URL("/")}}/image/icon/bookmark_active.png';
-                    var bookmark_noactive = '{{URL("/")}}/image/icon/bookmark.png';
-                    var postid=$(this).attr('data-post-id');
-                    $.ajax({
-                        url: "{{URL('/')}}/sebookmark",
-                        type: 'post',
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            'postid':postid
-                        },
-                        success: function(data){
-                            var response=data[1].split(":")[0];
-                            var count=data[1].split(":")[1];
-                            if(response=='liked'){
-                                $(this).attr('src', '{{URL("/")}}/image/icon/bookmark_active.png');
-                                $('#count_'+postid).text(count);
-                            }else if(response=='dislike'){
-                                $(this).attr('src', '{{URL("/")}}/image/icon/bookmark.png');
-                                $('#count_'+postid).text(count);
-                            }
-                        }
-
-                    });
-                @endguest
-            });
+            
         });
 
         $('.category-nav li').on('click',function(){
@@ -530,13 +501,13 @@
                             var bookmark_active = '{{URL("/")}}/image/icon/bookmark_active.png';
                             var bookmark_noactive = '{{URL("/")}}/image/icon/bookmark.png';
                             if(response['data'][i].isliked){
-                                var like_img=(response['data'][i].isliked.length>0)?src_active:src_noactive;
+                                var like_img=src_active;
                             }else{
                                 var like_img=src_noactive;
                             }
 
-                            if(response['data'][i].bookmark){
-                                var bookmark_img=(response['data'][i].bookmark.length>0)?bookmark_active:bookmark_noactive;
+                            if(response['data'][i]['bookmark']){
+                                var bookmark_img=bookmark_active;
                             }else{
                                 var bookmark_img=bookmark_noactive;
                             }
@@ -589,6 +560,7 @@
 
                             $("#card_record").append(tr_str);
                         }
+                        //Likes
                         $('.chosenHeartIcon').on('click', function(e) {
                             e.preventDefault();
                             var obj=$(this);
@@ -614,6 +586,38 @@
                                         }else if(response=='dislike'){
                                             $(obj).attr('src', '{{URL("/")}}/image/icon/heart.png');
                                             $('#count_'+postid).text(count);
+                                        }
+                                    }
+
+                                });
+                            @endguest
+                        });
+                        //Bookmark
+                        $('.chosenBookmarkIcon').on('click', function(e) {
+                            e.preventDefault();
+                            var obj=$(this);
+                            @guest
+                                window.location.href = "{{route('login')}}";
+                            @else
+                                var bookmark_active = '{{URL("/")}}/image/icon/bookmark_active.png';
+                                var bookmark_noactive = '{{URL("/")}}/image/icon/bookmark.png';
+                                var postid=$(this).attr('data-post-id');
+                                
+                                $.ajax({
+                                    url: "{{URL('/')}}/sebookmark",
+                                    type: 'post',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        'postid':postid
+                                    },
+                                    success: function(data){
+                                        alert(data);
+                                        var response=data[1].split(":")[0];
+                                        var count=data[1].split(":")[1];
+                                        if(response=='liked'){
+                                            $(obj).attr('src', '{{URL("/")}}/image/icon/bookmark_active.png');
+                                        }else if(response=='dislike'){
+                                            $(obj).attr('src', '{{URL("/")}}/image/icon/bookmark.png');
                                         }
                                     }
 

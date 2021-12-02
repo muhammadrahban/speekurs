@@ -36,17 +36,17 @@ class WelcomeController extends Controller
         }else{
             // $posts = Post::where('category_id', $category_id)->with('like', 'isliked', 'bookmark')->orderBy('date', 'asc')->get();
             if ($id == 1) {
-                $posts = Post::where('category_id', $category_id)->with('isliked', 'bookmark')->withCount('like as like')->withCount('comment as comments')->orderBy('date', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like as like')->withCount('comment as comments')->orderBy('date', 'DESC')->get();
             }else if ($id == 2) {
-                $posts = Post::where('category_id', $category_id)->with('isliked', 'bookmark')->withCount('like')->withCount('comment as comments')->whereBetween('created_at', [Carbon::now()->subdays(7), Carbon::now()])->orderBy('like', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like')->withCount('comment as comments')->whereBetween('created_at', [Carbon::now()->subdays(7), Carbon::now()])->orderBy('like', 'DESC')->get();
             }else if ($id == 3) {
-                $posts = Post::where('category_id', $category_id)->with('isliked', 'bookmark')->withCount('like as like')->withCount('comment as comments')->orderBy('like', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like as like')->withCount('comment as comments')->orderBy('like', 'DESC')->get();
             }else if ($id == 4) {
-                $posts = Post::where('category_id', $category_id)->with('isliked', 'bookmark')->withCount('like as like')->withCount('comment as comments')->whereBetween('created_at', [Carbon::now()->subdays(7), Carbon::now()])->orderBy('comments', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like as like')->withCount('comment as comments')->whereBetween('created_at', [Carbon::now()->subdays(7), Carbon::now()])->orderBy('comments', 'DESC')->get();
             }else if ($id == 5) {
-                $posts = Post::where('category_id', $category_id)->with('isliked', 'bookmark')->withCount('like as like')->withCount('comment as comments')->orderBy('comments', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like as like')->withCount('comment as comments')->orderBy('comments', 'DESC')->get();
             }else{
-                $posts = Post::where('category_id', $category_id)->with('isliked', 'bookmark')->withCount('like as like')->orderBy('date', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like as like')->orderBy('date', 'DESC')->get();
             }
         }
 
