@@ -1,2 +1,7 @@
 Backend
 	1.forgot email issue
+
+TODO
+	Share dilog
+	comments like
+	remove bookmark on bookmark page
