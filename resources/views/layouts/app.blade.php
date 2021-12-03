@@ -133,36 +133,28 @@
         <div class="header-top sticky bg-white d-none d-lg-block py-2">
             <div class="container">
                 <div class="row align-items-center justify-content-between">
-                    <div class="col-md-2">
-                        <!-- brand logo start -->
+                    <div class="col-md-4">
                         <div class="brand-logo text-center">
                             <a href="{{ URL('/') }}">
-                                <img src="{{ asset('assets/front/images/Speekur_website_logo.png')}}" alt="brand logo">
+                                <img height="40" src="{{ asset('assets/front/images/Speekur_website_logo.png')}}" alt="brand logo">
                             </a>
                         </div>
-                        <!-- brand logo end -->
                     </div>
 
                     <!-- search -->
                     <div class="col-md-4">
-
-                            <!-- header top search start -->
-
-                            <form class="input-group">
-                                <input type="text" placeholder="Search" class="form-control border-light">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
-                                </div>
-                            </form>
-
-                            <!-- header top search end -->
-
+                        <form class="input-group">
+                            <input type="text" placeholder="Search" class="form-control border-light">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
+                            </div>
+                        </form>
                     </div>
                     <!-- search  end-->
 
                     @guest
                         <!-- nav links -->
-                        <div class="col-md-5 ">
+                        <div class="col-md-4">
                             <!-- header top navigation start -->
                             <div class="header-top-navigation">
                                 <nav>
@@ -187,11 +179,10 @@
                                 </nav>
                             </div>
                             <!-- header top navigation start -->
-
                         </div>
                         <!-- nav links end -->
                     @else
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="profile-setting-box">
                                 <div class="profile-thumb-small">
                                     <a href="javascript:void(0)" class="profile-triger">
@@ -229,30 +220,12 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li> --}}
                     @endguest
                     
 
                 </div>
             </div>
         </div>
-    
         <div class="mobile-header-wrapper sticky d-block d-lg-none">
             <div class="mobile-header position-relative px-2">
                 <div class="mobile-logo">
@@ -263,7 +236,6 @@
                 <div class="mobile-menu ">
                     <ul>
                         <li>
-                            
                             <span class="search-trigger">
                                 Search....
                                 <i class="search-icon flaticon-search"></i>
@@ -308,7 +280,7 @@
                                 <img height="40" class="avatar" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
                             </a>
                             <div class="profile-dropdown text-left">
-                            <div class="profile-body">
+                                <div class="profile-body">
                                     <ul>
                                         <li>
                                             <div class="profile-head p-0">
@@ -334,7 +306,6 @@
                                 </div>
                             </div>
                         @endguest
-                        
                     </div>
                     <!-- profile picture end -->
                 </div>
@@ -346,10 +317,8 @@
                     <nav class="font-weight-bold">
                         <ul class="d-flex flex-wrap justify-content-between">
                             @foreach (getCategories() as $key => $value)
-                            <li class="{{ ($key==0)? 'active':'' }}" id="cat_tab_{{ $value->id }}" data-category="{{ $value->id }}"><a>{{ $value->name }}</a></li>
+                                <li class="{{ ($key==0)? 'active':'' }}" id="cat_tab_{{ $value->id }}" data-category="{{ $value->id }}"><a>{{ $value->name }}</a></li>
                             @endforeach
-                            {{-- <li ><a href="index.html">NEWS</a></li>
-                            <li ><a href="index.html">DISCUSSION</a></li> --}}
                         </ul>
                     </nav>
                 </div>
@@ -536,7 +505,7 @@
                     if(len > 0){
                         for(var i=0; i<len; i++){
                             
-                            if(response['data'][i].isliked.length>0){
+                            if(response['data'][i].isliked){
                                 var like_img='fa fa-2x fa-heart';
                             }else{
                                 var like_img='far fa-2x fa-heart';
