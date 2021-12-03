@@ -1,6 +1,10 @@
 Backend
 	1.forgot email issue
+	2.Search
 
+Errors Found
+	1.ajax GET http://127.0.0.1:8000/getpost/1/2 500 (Internal Server Error)
+	
 TODO
 	Share dilog
 	comments like

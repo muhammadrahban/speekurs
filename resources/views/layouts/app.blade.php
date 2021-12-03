@@ -103,8 +103,7 @@
 	============================================ -->
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/front/css/vendor/bootstrap.min.css ')}}    ">
+    
     <!-- Icon Font CSS -->
     <link rel="stylesheet" href="{{ asset('assets/front/css/vendor/bicon.min.css ')}} ">
     <!-- Flat Icon CSS -->
@@ -119,9 +118,10 @@
     <link rel="stylesheet" href="{{ asset('assets/front/css/plugins/perfect-scrollbar.css ')}} ">
     <!-- light gallery css -->
     <link rel="stylesheet" href="{{ asset('assets/front/css/plugins/lightgallery.min.css ')}} ">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/front/css/vendor/bootstrap.min.css ')}}">
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css ')}} ">
-
     <script src="https://kit.fontawesome.com/79e46b1496.js" crossorigin="anonymous"></script>
 
 </head>
@@ -129,7 +129,7 @@
 <body>
 
     <!-- header area start -->
-    <header>
+    <header class="shadow">
         <div class="header-top sticky bg-white d-none d-lg-block py-2">
             <div class="container">
                 <div class="row align-items-center justify-content-between">
@@ -147,12 +147,14 @@
                     <div class="col-md-4">
 
                             <!-- header top search start -->
-                            <div class="header-top-search">
-                                <form class="top-search-box">
-                                    <input type="text" placeholder="Search" class="top-search-field">
-                                    <button class="top-search-btn"><i class="flaticon-search"></i></button>
-                                </form>
-                            </div>
+
+                            <form class="input-group">
+                                <input type="text" placeholder="Search" class="form-control border-light">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
+                                </div>
+                            </form>
+
                             <!-- header top search end -->
 
                     </div>
@@ -194,7 +196,7 @@
                                 <div class="profile-thumb-small">
                                     <a href="javascript:void(0)" class="profile-triger">
                                         <figure>
-                                            <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture">
+                                            <img src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
                                         </figure>
                                     </a>
                                     <div class="profile-dropdown">
@@ -204,11 +206,11 @@
                                         </div>
                                         <div class="profile-body">
                                             <ul>
-                                                <li><a href="#"><i class="flaticon-settings"></i>Setting</a></li>
+                                                <li><a href="#"><i class="fa fa-cog"></i>Setting</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();" >
-                                                        <i class="flaticon-unlock"></i>Sign out
+                                                        <i class="fa fa-sign-out-alt"></i>Sign out
                                                     </a>
                                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                                         @csrf
@@ -245,110 +247,133 @@
                             </div>
                         </li> --}}
                     @endguest
+                    
+
                 </div>
             </div>
         </div>
-    </header>
-    <!-- header area end -->
-    <!-- header area start -->
-    <header>
+    
         <div class="mobile-header-wrapper sticky d-block d-lg-none">
-            <div class="mobile-header position-relative ">
+            <div class="mobile-header position-relative px-2">
                 <div class="mobile-logo">
                     <a href="index.html">
-                        <img src="{{ asset('assets/front/images/Speekur_Logo_mobile.png')}}" alt="logo">
+                        <img height="40" src="{{ asset('assets/front/images/Speekur_Logo_mobile.png')}}" alt="logo">
                     </a>
                 </div>
                 <div class="mobile-menu ">
                     <ul>
                         <li>
-                            Search....
-                            <button class="search-trigger">
+                            
+                            <span class="search-trigger">
+                                Search....
                                 <i class="search-icon flaticon-search"></i>
                                 <i class="close-icon flaticon-cross-out"></i>
-                            </button>
-                            <div class="mob-search-box">
-                                <form class="mob-search-inner">
-                                    <input type="text" placeholder="Search Here" class="mob-search-field">
-                                    <button class="mob-search-btn"><i class="flaticon-search"></i></button>
+                            </span>
+                            <div class="mob-search-box bg-white">
+                                <form class="input-group">
+                                    <input type="text" placeholder="Search" class="form-control border-light">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
+                                    </div>
                                 </form>
                             </div>
                         </li>
                     </ul>
                 </div>
-                <div class="sign-up">
-                    <span> Sign up</span>
-                </div>
+                @guest
+                    @if (Route::has('register'))
+                    <div class="sign-up">
+                        <span> Sign up</span>
+                    </div>
+                    @endif
+                @endguest
                 <div class="mobile-header-profile-menu">
                     <!-- profile picture end -->
                     <div class="profile-thumb profile-setting-box">
-                        <a href="javascript:void(0)" class="profile-triger">
-                            <figure class="profile-thumb-middle">
-                                <img src="{{ asset('assets/front/images/bars-solid.svg')}}" alt="profile picture">
-                            </figure>
-                        </a>
-                        <div class="profile-dropdown text-left">
-                           <div class="profile-body">
+                        @guest
+                            <a href="javascript:void(0)" class="profile-triger">
+                                <i class="fa fa-2x fa-bars"></i>
+                            </a>
+                            <div class="profile-dropdown text-left">
+                            <div class="profile-body">
                                 <ul>
-                                    <li><a href="profile.html">Home</a></li>
-                                    <li><a href="profile.html">About</a></li>
-
+                                    <li ><a href="{{ route('login') }}">Login</a></li>
+                                    @foreach (getPage() as $page)
+                                        <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
+                                    @endforeach
                                 </ul>
-
                             </div>
-                        </div>
+                        @else
+                            <a href="javascript:void(0)" class="profile-triger">
+                                <img height="40" class="avatar" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
+                            </a>
+                            <div class="profile-dropdown text-left">
+                            <div class="profile-body">
+                                    <ul>
+                                        <li>
+                                            <div class="profile-head p-0">
+                                                <h5 class="name"><a href="#">{{ Auth::user()->name }}</a></h5>
+                                                <a class="mail" href="#">{{ Auth::user()->email }}</a>
+                                            </div>
+                                        </li>
+                                        <li><hr></li>
+                                        <li><a href="#"><i class="fa fa-cog"></i>Setting</a></li>
+                                        <li>
+                                            <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();" >
+                                                <i class="fa fa-sign-out-alt"></i>Sign out
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                        @foreach (getPage() as $page)
+                                            <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endguest
+                        
                     </div>
                     <!-- profile picture end -->
                 </div>
             </div>
         </div>
+        <div class="col-12 sticky category-nav bg-white">
+            <div class="col-lg-6 offset-md-3 d-block d-md-flex p-0">
+                <div style="flex:3" class="header-top-navigation">
+                    <nav class="font-weight-bold">
+                        <ul class="d-flex flex-wrap justify-content-between">
+                            @foreach (getCategories() as $key => $value)
+                            <li class="{{ ($key==0)? 'active':'' }}" id="cat_tab_{{ $value->id }}" data-category="{{ $value->id }}"><a>{{ $value->name }}</a></li>
+                            @endforeach
+                            {{-- <li ><a href="index.html">NEWS</a></li>
+                            <li ><a href="index.html">DISCUSSION</a></li> --}}
+                        </ul>
+                    </nav>
+                </div>
+
+                <div style="flex:1" class="ml-md-5 ml-0 d-flex text-nowrap align-items-center justify-content-between font-weight-bold">
+                    Sort By
+                    <select id="sortType" class="text-warning bg-transparent border-0 font-weight-bold">
+                        <option value="1">Most Recent</option>
+                        <option value="2">Most Liked This Week</option>
+                        <option value="3">Most Liked All Time</option>
+                        <option value="4">Most Comment This Week</option>
+                        <option value="5">Most Comments All Time</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
     </header>
     <!-- header area end -->
     <main>
-        <div class="main-wrapper pt-80">
+        <div class="main-wrapper pt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12 bot_nav">
-                        <div class="col-lg-6 offset-md-3 d-flex">
-                            <div class="header-top-navigation secondary_nav_bar_left">
-                                <nav class="category-nav">
-                                    <ul>
-                                        @foreach (getCategories() as $key => $value)
-                                        <li {{ ($key==0)? 'class=active ': " " }} id="cat_tab_{{ $value->id }}" data-category="{{ $value->id }}"><a   >{{ $value->name }}</a></li>
-
-                                        @endforeach
-                                        {{-- <li ><a href="index.html">NEWS</a></li>
-                                        <li ><a href="index.html">DISCUSSION</a></li> --}}
-                                    </ul>
-                                </nav>
-                            </div>
-
-                            <div class="d-flex text-nowrap align-items-center">
-                                Sort By
-                                <select id="sortType" class="bg-transparent border-0y">
-                                    <option value="1">Most Recent</option>
-                                    <option value="2">Most Liked This Week</option>
-                                    <option value="3">Most Liked All Time</option>
-                                    <option value="4">Most Comment This Week</option>
-                                    <option value="5">Most Comments All Time</option>
-                                </select>
-                                {{-- <div class="dropdown">
-                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Sort by resent
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                      <button class="dropdown-item" type="button">most recent</button>
-                                      <button class="dropdown-item" type="button">most liked this week</button>
-                                      <button class="dropdown-item" type="button">most liked all time</button>
-                                      <button class="dropdown-item" type="button">most comments this week</button>
-                                      <button class="dropdown-item" type="button">most comments all time</button>
-                                    </div>
-                                  </div> --}}
-                            </div>
-
-                        </div>
-                    </div>
-
+                    
                     <div class="col-lg-3 order-2 order-lg-1">
                         @guest
 
@@ -441,7 +466,22 @@
     <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
 
      <script type='text/javascript'>
-
+       
+       var height=0;
+       height=document.querySelectorAll('.header-top')[0].clientHeight;
+       if(height==0){
+            height=document.querySelectorAll('.mobile-header-wrapper')[0].clientHeight;
+       }
+       $('.category-nav').css('margin-top',height+'px');
+       height+=document.querySelectorAll('.category-nav')[0].clientHeight;
+       $('header').first().css({
+           'height':height+'px',
+           'width':'100%',
+           'position':'fixed',
+           'z-index':'1000'
+        });
+       $('.main-wrapper').parent().css('padding-top',height+'px');
+           
         $('#sortType').on('change',function(){
 
             fetchRecords();
@@ -496,20 +536,17 @@
 
                     if(len > 0){
                         for(var i=0; i<len; i++){
-                            var src_active = '{{URL("/")}}/image/icon/heart_active.png';
-                            var src_noactive = '{{URL("/")}}/image/icon/heart.png';
-                            var bookmark_active = '{{URL("/")}}/image/icon/bookmark_active.png';
-                            var bookmark_noactive = '{{URL("/")}}/image/icon/bookmark.png';
-                            if(response['data'][i].isliked){
-                                var like_img=src_active;
+                            
+                            if(response['data'][i].isliked.length>0){
+                                var like_img='fa fa-2x fa-heart';
                             }else{
-                                var like_img=src_noactive;
+                                var like_img='far fa-2x fa-heart';
                             }
 
                             if(response['data'][i]['bookmark']){
-                                var bookmark_img=bookmark_active;
+                                var bookmark_img='fa fa-2x fa-bookmark';
                             }else{
-                                var bookmark_img=bookmark_noactive;
+                                var bookmark_img='far fa-2x fa-bookmark';
                             }
 
                             var tr_str =
@@ -530,28 +567,27 @@
                                                 '</a>'+
                                             '</figure>'+
                                         '</div>' +
-                                        '<div class="post-meta">' +
-                                            '<button class="post-meta-like">' +
-                                                '<img src="'+like_img+'" data-post-id="'+ response['data'][i].id + '" class="chosenHeartIcon" width="24" height="24" />' +
-                                                '<p style="float: right; margin-left: 10px;" id="count_'+ response['data'][i].id + '">'+ response['data'][i]['like'] + '</p>' +
-                                            '</button>'+
+                                        '<div class="post-meta p-0">' +
+                                            '<a>' +
+                                                '<i class="chosenHeartIcon align-middle mr-2 '+like_img+'" data-post-id="'+ response['data'][i].id + '"></i>' +
+                                                '<span id="count_'+ response['data'][i].id + '">'+ response['data'][i]['like'] + '</span>' +
+                                            '</a>'+
                                             '<ul class="comment-share-meta">' +
                                                 '<li>'+
-                                                    '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'"><button class="post-comment">'+
-                                                        '<i class="bi bi-chat-bubble"></i>' +
+                                                    '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'" class="text-dark">'+
+                                                        '<i class="align-middle mr-2  fa fa-2x fa-comments"></i>' +
                                                         '<span>'+ response['data'][i]['comments'] + '</span>'+
-                                                    '</button>'+
                                                     '</a>'+
                                                 '</li>'+
                                                 '<li>'+
-                                                    '<button class="post-bookmark">'+
-                                                        '<img src="'+bookmark_img+'" data-post-id="'+ response['data'][i].id + '" class="chosenBookmarkIcon" width="24" height="24" />'+
-                                                    '</button>'+
+                                                    '<a>'+
+                                                        '<i class="chosenBookmarkIcon align-middle '+bookmark_img+'" data-post-id="'+ response['data'][i].id + '"></i>'+
+                                                    '</a>'+
                                                 '</li>'+
                                                 '<li>'+
-                                                    '<button class="post-share">'+
-                                                        '<i class="bi bi-share"></i>'+
-                                                    '</button>'+
+                                                    '<a>'+
+                                                        '<i class="chosenShareIcon align-middle fa fa-2x fa-share" data-post-id="'+ response['data'][i].id + '"></i>'+
+                                                    '</a>'+
                                                 '</li>'+
                                             '</ul>'+
                                         '</div>'+
@@ -567,8 +603,6 @@
                             @guest
                                 window.location.href = "{{route('login')}}";
                             @else
-                                var src_active = '{{URL("/")}}/image/icon/heart_active.png';
-                                var src_noactive = '{{URL("/")}}/image/icon/heart.png';
                                 var postid=$(obj).attr('data-post-id');
                                 $.ajax({
                                     url: "{{URL('/')}}/setLike",
@@ -581,10 +615,10 @@
                                         var response=data[1].split(":")[0];
                                         var count=data[1].split(":")[1];
                                         if(response=='liked'){
-                                            $(obj).attr('src', '{{URL("/")}}/image/icon/heart_active.png');
+                                            $(obj).attr('class', 'chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart');
                                             $('#count_'+postid).text(count);
                                         }else if(response=='dislike'){
-                                            $(obj).attr('src', '{{URL("/")}}/image/icon/heart.png');
+                                            $(obj).attr('class', 'chosenHeartIcon align-middle mr-2 far fa-2x fa-heart');
                                             $('#count_'+postid).text(count);
                                         }
                                     }
@@ -599,8 +633,6 @@
                             @guest
                                 window.location.href = "{{route('login')}}";
                             @else
-                                var bookmark_active = '{{URL("/")}}/image/icon/bookmark_active.png';
-                                var bookmark_noactive = '{{URL("/")}}/image/icon/bookmark.png';
                                 var postid=$(this).attr('data-post-id');
                                 
                                 $.ajax({
@@ -611,13 +643,12 @@
                                         'postid':postid
                                     },
                                     success: function(data){
-                                        alert(data);
                                         var response=data[1].split(":")[0];
                                         var count=data[1].split(":")[1];
                                         if(response=='liked'){
-                                            $(obj).attr('src', '{{URL("/")}}/image/icon/bookmark_active.png');
+                                            $(obj).attr('class', 'chosenBookmarkIcon align-middle fa fa-2x fa-bookmark');
                                         }else if(response=='dislike'){
-                                            $(obj).attr('src', '{{URL("/")}}/image/icon/bookmark.png');
+                                            $(obj).attr('class', 'chosenBookmarkIcon align-middle far fa-2x fa-bookmark');
                                         }
                                     }
 
