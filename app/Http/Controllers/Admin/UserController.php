@@ -36,4 +36,10 @@ class UserController extends Controller
         $user->save();
         return redirect('/admin/users')->with('success', 'User Updated!');
     }
+
+    public function getactivity($id){
+        $users = User::find($id);
+        // dd($users);
+        return view('admin.user.activity');
+    }
 }

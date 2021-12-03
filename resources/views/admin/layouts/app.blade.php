@@ -103,6 +103,19 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Userscollapse"
+                    aria-expanded="true" aria-controls="Userscollapse">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Users</span>
+                </a>
+                <div id="Userscollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.user.index') }}">View users</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
