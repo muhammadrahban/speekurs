@@ -103,7 +103,7 @@
 	============================================ -->
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
-    
+
     <!-- Icon Font CSS -->
     <link rel="stylesheet" href="{{ asset('assets/front/css/vendor/bicon.min.css ')}} ">
     <!-- Flat Icon CSS -->
@@ -221,7 +221,7 @@
                             </div>
                         </div>
                     @endguest
-                    
+
 
                 </div>
             </div>
@@ -274,6 +274,7 @@
                                         <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
                                     @endforeach
                                 </ul>
+                            </div>
                             </div>
                         @else
                             <a href="javascript:void(0)" class="profile-triger">
@@ -342,7 +343,7 @@
         <div class="main-wrapper pt-3">
             <div class="container-fluid">
                 <div class="row">
-                    
+
                     <div class="col-lg-3 order-2 order-lg-1">
                         @guest
 
@@ -435,7 +436,7 @@
     <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
 
      <script type='text/javascript'>
-       
+
        var height=0;
        height=document.querySelectorAll('.header-top')[0].clientHeight;
        if(height==0){
@@ -450,7 +451,7 @@
            'z-index':'1000'
         });
        $('.main-wrapper').parent().css('padding-top',height+'px');
-           
+
         $('#sortType').on('change',function(){
             fetchRecords();
         });
@@ -461,16 +462,17 @@
 
             // Search by userid
             // $('#but_search').click(function(){
-            //     var userid = Number($('#search').val().trim());
-            //     if(userid > 0){
-            //         fetchRecords(userid);
-            //     }
-            // });
-
-
-           
-
-            
+                // var search = Number($('#search').val().trim());
+                var search = "Corru";
+                $.ajax({
+                    url: "{{URL('/')}}/search/"+search,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(response){
+                        console.log(response);
+                    }
+                // });
+            });
         });
 
         $('.category-nav li').on('click',function(){
@@ -504,7 +506,7 @@
 
                     if(len > 0){
                         for(var i=0; i<len; i++){
-                            
+
                             if(response['data'][i].isliked){
                                 var like_img='fa fa-2x fa-heart';
                             }else{
@@ -602,7 +604,7 @@
                                 window.location.href = "{{route('login')}}";
                             @else
                                 var postid=$(this).attr('data-post-id');
-                                
+
                                 $.ajax({
                                     url: "{{URL('/')}}/sebookmark",
                                     type: 'post',

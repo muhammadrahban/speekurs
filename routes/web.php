@@ -27,6 +27,7 @@ Route::get('/getpost/{cat}/{id}', 'WelcomeController@getPost');
 Route::get('/page/{slug}', 'WelcomeController@getPage');
 Route::get('/singlepost/{id}', 'WelcomeController@singlepost');
 Route::post('/setLike', 'WelcomeController@setLike');
+Route::get('/search/{char}', 'WelcomeController@search');
 Route::post('/sebookmark', 'WelcomeController@sebookmark');
 Route::post('/setComment', 'WelcomeController@setComment');
 Route::post('/getComments', 'WelcomeController@getComments');
@@ -36,6 +37,10 @@ Route::view('/primary_policy', 'primary_policy');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/setting', 'ProfileController@profile')->name('profile');
+Route::post('/setting', 'ProfileController@setprofile')->name('setprofile');
+Route::get('/account', 'ProfileController@account')->name('account');
+Route::post('/account', 'ProfileController@setaccount')->name('setaccount');
 
 Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::namespace('Auth')->group(function(){

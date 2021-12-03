@@ -23,7 +23,7 @@ class WelcomeController extends Controller
             if ($id == 1) {
                 $posts = Post::where('category_id', $category_id)->withCount('like as like')->withCount('comment as comments')->orderBy('date', 'DESC')->get();
             }else if ($id == 2) {
-                $posts = Post::where('category_id', $category_id)->withCount('like')->withCount('comment as comments')->whereBetween('created_at', [Carbon::now()->subdays(7), Carbon::now()])->orderBy('like', 'DESC')->get();
+                $posts = Post::where('category_id', $category_id)->withCount('like as like')->withCount('comment as comments')->whereBetween('created_at', [Carbon::now()->subdays(7), Carbon::now()])->orderBy('like', 'DESC')->get();
             }else if ($id == 3) {
                 $posts = Post::where('category_id', $category_id)->withCount('like as like')->withCount('comment as comments')->orderBy('like', 'DESC')->get();
             }else if ($id == 4) {
@@ -62,6 +62,17 @@ class WelcomeController extends Controller
         }
         $data['bookmark'] = $bookmark;
         return view('bookmark', $data);
+    }
+
+    public function removebookmark(Request $request){
+        if (!Auth::check()) {
+        }else{
+            $user_id    = Auth::user()->id;
+            $post_id    = $request->post('post_id');
+            $bookmark   = Bookmark::where('user_id', $user_id)->where('post_id', $post_id)->get();
+            $bookmark->delete();
+        }
+        return $this->getbookmark();
     }
 
     public function setLike(Request $request){
@@ -169,5 +180,12 @@ class WelcomeController extends Controller
             }
             return response()->json(['response','error']);
         }
+    }
+
+    public function search($char = ""){
+
+        $posts = Post::where('title', 'LIKE', "%$char%")->orWhere('sub_title', 'LIKE', "%$char%")->take(5)->get();
+        return response()->json(['response',$posts]);
+
     }
 }
