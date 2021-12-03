@@ -28,6 +28,9 @@ Table of content
 /*
 START CUSTOM
 */
+.category-nav{
+  line-height: 30px;
+}
 select option{
   color:black;
 }

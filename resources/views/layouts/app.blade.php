@@ -483,7 +483,6 @@
        $('.main-wrapper').parent().css('padding-top',height+'px');
            
         $('#sortType').on('change',function(){
-
             fetchRecords();
         });
         $(document).ready(function(){
