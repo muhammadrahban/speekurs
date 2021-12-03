@@ -6,7 +6,10 @@
     <div class="inner_section row">
         <div class="offset-md-4 col-md-4">
             <h1 class="text-center m-4 font-weight-bold">Sign in</h1>
+            @if (session('error'))
+            <p class="alert alert-danger">{{session('error')}}</p>
 
+            @endif
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="E-mail">

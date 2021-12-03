@@ -27,6 +27,7 @@
                     <th>Email</th>
                     <th>Status</th>
                     <th>Date</th>
+                    <th>Activity</th>
                     <th>Edit</th>
                     {{-- <th>Delete</th> --}}
                 </thead>
@@ -40,6 +41,7 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ ($user->status) ? 'Active' : 'Inactive' }}</td>
                             <td>{{ $user->created_at->diffForHumans() }}</td>
+                             <td><a href="{{ route('admin.user.activity', $user->id)}}" title="Activity"><button class="btn btn-success btn-sm">Activity</button></a></td>
                              <td><a href="{{ route('admin.user.edit', $user->id)}}" title="Edit"><button class="btn btn-primary btn-sm">Edit</button></a></td>
                             {{--<form action="{{$user->id}}" method="post">
                                 @csrf

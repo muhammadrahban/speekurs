@@ -56,6 +56,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
     Route::get('/users', 'UserController@index')->name('admin.user.index');
     Route::get('/edit/{id}', 'UserController@edit')->name('admin.user.edit');
     Route::patch('/update/{id}', 'UserController@update')->name('admin.user.update');
+    Route::get('/users/activity/{id}', 'UserController@getactivity')->name('admin.user.activity');
 });
 
 Route::get('login/{provider}', 'SocialController@redirect');
