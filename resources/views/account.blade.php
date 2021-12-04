@@ -1,74 +1,64 @@
 @extends('layouts.app')
-
 @section('title' )
-
 @section('content')
-    <form action="{{ route("setaccount") }}" method="post">
-        @csrf
-    </form>
-
-                <div class="col-lg-6 order-1 order-lg-2" id="card_record">
-                    <!-- share box start -->
-                    <!-- share box end -->
-                    <!-- post status start -->
-                    {{-- <div class="card">
-                        <!-- post title start -->
-                        <div class="post-title d-flex align-items-center">
-
-                            <div class="posted-author">
-                                <h6 class="author"><a href="profile.html">merry watson</a></h6>
-                            </div>
-                        </div>
-                        <!-- post title start -->
-                        <div class="post-content">
-                            <p class="post-desc">
-                                Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                                default model text, and a search for 'lorem ipsum' will uncover many web sites still
-                                in their infancy.
-                            </p>
-                            <div class="post-thumb-gallery">
-                                <figure class="post-thumb img-popup">
-                                    <a href="{{ asset('assets/front/images/post/post-large-1.jpg')}}">
-                                        <img src="{{ asset('assets/front/images/post/post-1.jpg')}}" alt="post image">
-                                    </a>
-                                </figure>
-                            </div>
-                            <div class="post-meta">
-                                <button class="post-meta-like">
-                                    <i class="bi bi-heart-beat"></i>
-                                    <span>You and 201 people like this</span>
-                                    <strong>201</strong>
-                                </button>
-                                <ul class="comment-share-meta">
-                                    <li>
-                                        <a href="{{ Auth::user() ? '12' : '/' }}"><button class="post-comment">
-                                            <i class="bi bi-chat-bubble"></i>
-                                            <span>41</span>
-                                        </button>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <button class="post-bookmark">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
-                                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                              </svg>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="post-share">
-                                            <i class="bi bi-share"></i>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> --}}
-                    <!-- post status end -->
-
-
+<div class="col-lg-6 order-1 order-lg-2">
+    <div class="p-0">
+        <h3 class="text-center mt-5">Account Settings</h3>
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
                 </div>
-
-
-
+            @endif
+            <form method="POST" action="{{ route('setaccount') }}">
+                @csrf
+                <div class="row m-0 align-items-center ">
+                    <div class="col-12 mb-4 text-center">
+                        <img height="70" src="{{URL('/')}}/image/{{Auth::user()->image}}">
+                    </div>
+                    <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('name') is-invalid @enderror">
+                        <label>{{ __('Email') }}</label>
+                        <input type="email" class="form-control border-0 p-0" name="email" value="{{Auth::user()->email}}" required>
+                    </div>
+                    <div class="col-md-6 mb-3 px-0 pr-md-3">
+                        <div class="px-3 py-2 bg-white rounded shadow @error('password') is-invalid @enderror">
+                            <label>{{ __('Password') }}</label>
+                            <input type="password" class="form-control border-0 p-0" name="password">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 px-0 pl-md-3">
+                        <div class="px-3 py-2 bg-white rounded shadow @error('password_confirmation') is-invalid @enderror">
+                            <label>{{ __('Confirm Password') }}</label>
+                            <input type="password" class="form-control border-0 p-0" name="password_confirmation">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-12">
+                        <small>Enter current password to confirm changes</small>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control mb-3" placeholder="Current Password" name="current_password" required>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary btn-block mb-3">
+                            {{ __('Save Account') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-12">
+                        <hr>
+                        <div class="modal-footer shadow rounded bg-white">
+                            <p class="m-0 ml-0 mr-auto">Deactivate your account</p>
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Deactivate</button>
+                        </div>
+                    </div>
+                </div>
+            </form>         
+        </div>
+        
+    </div>
+</div>
 @endsection
+
