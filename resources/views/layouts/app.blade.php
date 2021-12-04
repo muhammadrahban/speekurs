@@ -144,7 +144,7 @@
                     <!-- search -->
                     <div class="col-md-4">
                         <form class="input-group">
-                            <input type="text" placeholder="Search" class="form-control border-light">
+                            <input type="text" placeholder="Search" id="search_text" class="form-control border-light">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
                             </div>
@@ -197,7 +197,7 @@
                                         </div>
                                         <div class="profile-body">
                                             <ul>
-                                                <li><a href="#"><i class="fa fa-cog"></i>Setting</a></li>
+                                                <li><a href="{{route('account')}}"><i class="fa fa-cog"></i>Setting</a></li>
                                                 <li>
                                                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();" >
@@ -290,7 +290,7 @@
                                             </div>
                                         </li>
                                         <li><hr></li>
-                                        <li><a href="#"><i class="fa fa-cog"></i>Setting</a></li>
+                                        <li><a href="{{ route('account') }}"><i class="fa fa-cog"></i>Setting</a></li>
                                         <li>
                                             <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();" >
@@ -654,6 +654,21 @@
                         if(data=='success'){
                             getComments(postid);
                         }
+                    }
+                })
+            }
+        });
+
+        $('#search_text').on('keyup',function(){
+            var message=$('#search_text').val();
+            var length = message.length;
+            if (length >= 2) {
+                // alert(message);
+                $.ajax({
+                    type:"get",
+                    url:'{{URL('/')}}/search/'+message,
+                    success: function(data){
+                        console.log(data)
                     }
                 })
             }

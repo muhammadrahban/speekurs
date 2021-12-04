@@ -1,8 +1,14 @@
 Backend
 	1.forgot email issue DONE
-	2.Search DONE 50%
+	2.Search DONE 50% (search input box par event keyup laga diya hy data bhi responce ma raha hy ab ui bata kar display krwana hy)
 
 TODO
-	Share dilog
-	comments like
-	remove bookmark on bookmark page
+	Share dilog (Not complete)
+	comments like (Not complete)
+	remove bookmark on bookmark page (Not complete)
+
+    Account setting page ui  (is ma many ui ki kuch changes kri hy tum deactive par popup krwa do confirmed k phr backend sy ma kr dunga)
+
+    forget email (Not complete)
+    forget password (Not complete)
+
