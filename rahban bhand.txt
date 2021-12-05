@@ -2,7 +2,12 @@ Backend
 	1.forgot email issue DONE
 	2.Search DONE 50%
 
-TODO
+TODO UI
+	Edit Profile Page
+	Deactivate Account Page
+	Forgot Password Page
+	remove bookmark on bookmark page
 	Share dilog
 	comments like
-	remove bookmark on bookmark page
+	
+

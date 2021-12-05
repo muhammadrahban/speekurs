@@ -38,6 +38,40 @@ select option{
   -webkit-box-shadow: 0px 1px 20px 0px rgba(85, 85, 85, 0.25);
           box-shadow: 0px 1px 20px 0px rgba(85, 85, 85, 0.25);
 }
+textarea:focus, 
+textarea.form-control:focus, 
+input.form-control:focus, 
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=email]:focus, 
+input[type=number]:focus, 
+[type=text].form-control:focus, 
+[type=password].form-control:focus, 
+[type=email].form-control:focus, 
+[type=tel].form-control:focus, 
+[contenteditable].form-control:focus {
+  box-shadow:none;
+}
+#search_result{
+  position:fixed; 
+  width:100%; 
+  background:white; 
+  left:50%; 
+  transform:translateX(-50%); 
+  width:400px; 
+  max-width:100%; 
+  max-height:90vh;
+  z-index:2000;
+  -webkit-box-shadow: 0px 30px 20px 0px rgba(85, 85, 85, 0.25);
+          box-shadow: 0px 30px 20px 0px rgba(85, 85, 85, 0.25);
+  border-radius:0 0 10px 10px;
+  overflow-Y:auto;
+  display: none;
+  line-height:18px;
+}
+#search_result.active{
+  display: block;
+}
 /*
 END CUSTOM
 */

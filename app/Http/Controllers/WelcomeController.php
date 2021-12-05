@@ -185,7 +185,8 @@ class WelcomeController extends Controller
     public function search($char = ""){
 
         $posts = Post::where('title', 'LIKE', "%$char%")->orWhere('sub_title', 'LIKE', "%$char%")->take(5)->get();
-        return response()->json(['response',$posts]);
+        $Posts['data'] = $posts;
+        return json_encode($Posts);
 
     }
 }

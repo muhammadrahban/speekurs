@@ -1,87 +1,4 @@
-{{-- <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
-</body>
-</html> --}}
-
-
 <!doctype html>
-
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -127,14 +44,14 @@
 </head>
 
 <body>
-
+    <div id="search_result"></div>
     <!-- header area start -->
     <header class="shadow">
         <div class="header-top sticky bg-white d-none d-lg-block py-2">
             <div class="container">
                 <div class="row align-items-center justify-content-between">
                     <div class="col-md-4">
-                        <div class="brand-logo text-center">
+                        <div class="brand-logo text-left">
                             <a href="{{ URL('/') }}">
                                 <img height="40" src="{{ asset('assets/front/images/Speekur_website_logo.png')}}" alt="brand logo">
                             </a>
@@ -143,12 +60,12 @@
 
                     <!-- search -->
                     <div class="col-md-4">
-                        <form class="input-group">
-                            <input type="text" placeholder="Search" class="form-control border-light">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-transparent"><i class="fa fa-search"></i></span>
                             </div>
-                        </form>
+                            <input name="Search" type="text" placeholder="Search" class="form-control border-muted">
+                        </div>
                     </div>
                     <!-- search  end-->
 
@@ -156,18 +73,16 @@
                         <!-- nav links -->
                         <div class="col-md-4">
                             <!-- header top navigation start -->
-                            <div class="header-top-navigation">
+                            <div class="header-top-navigation text-left text-md-right font-weight-bold">
                                 <nav>
                                     <ul>
                                         @if (Route::has('register'))
-                                            <li ><a href="{{ route('register') }}">Signup</a></li>
+                                            <li><a class="nav-link pr-4" href="{{ route('register') }}">Signup</a></li>
                                         @endif
-                                        <li ><a href="{{ route('login') }}">Login</a></li>
-                                        <li >
+                                        <li ><a class="nav-link pr-4" href="{{ route('login') }}">Login</a></li>                                        
+                                        <li>
                                             <div class="dropdown">
-                                                <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                  About
-                                                </a>
+                                                <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                   @foreach (getPage() as $page)
                                                     <a class="dropdown-item" href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a>
@@ -183,42 +98,46 @@
                         <!-- nav links end -->
                     @else
                         <div class="col-md-4">
-                            <div class="profile-setting-box">
-                                <div class="profile-thumb-small">
-                                    <a href="javascript:void(0)" class="profile-triger">
-                                        <figure>
-                                            <img src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
-                                        </figure>
-                                    </a>
-                                    <div class="profile-dropdown">
-                                        <div class="profile-head">
-                                            <h5 class="name"><a href="#">{{ Auth::user()->name }}</a></h5>
-                                            <a class="mail" href="#">{{ Auth::user()->email }}</a>
-                                        </div>
-                                        <div class="profile-body">
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-cog"></i>Setting</a></li>
-                                                <li>
-                                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();" >
-                                                        <i class="fa fa-sign-out-alt"></i>Sign out
+                            <div class="header-top-navigation font-weight-bold">
+                                <nav>
+                                    <ul class="d-flex align-items-center justify-content-end">
+                                        <li>
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                  @foreach (getPage() as $page)
+                                                    <a class="dropdown-item" href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a>
+                                                  @endforeach
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="profile-setting-box text-left">
+                                                <div class="dropdown ">
+                                                    <a class="d-flex" role="button" type="button" class="btn" data-toggle="dropdown"> 
+                                                        <img class="mx-2" height="40" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
+                                                        <div>
+                                                            <span class="mb-0 font-weight-bold text-dark">{{ Auth::user()->name }}</span>
+                                                            <small class="d-block text-dark">{{ Auth::user()->email }}</small>
+                                                        </div>
                                                     </a>
-                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                        @csrf
-                                                    </form>
-                                                </li>
-                                                @foreach (getPage() as $page)
-                                                    <li>
-                                                        <a href="{{ url('/page', $page->slug) }}">
-                                                            <i class="far fa-file"></i>{{ $page->title }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownProfile">
+                                                        <a class="dropdown-item"  href="{{ route('profile') }}">
+                                                            <i class="fa fa-cog"></i>Setting</a>
+                                                        <a class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" >
+                                                            <i class="fa fa-sign-out-alt"></i>Sign out</a>
+                                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                            @csrf
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
+                            
                         </div>
                     @endguest
 
@@ -229,7 +148,7 @@
         <div class="mobile-header-wrapper sticky d-block d-lg-none">
             <div class="mobile-header position-relative px-2">
                 <div class="mobile-logo">
-                    <a href="index.html">
+                    <a href="{{ URL('/') }}">
                         <img height="40" src="{{ asset('assets/front/images/Speekur_Logo_mobile.png')}}" alt="logo">
                     </a>
                 </div>
@@ -242,23 +161,17 @@
                                 <i class="close-icon flaticon-cross-out"></i>
                             </span>
                             <div class="mob-search-box bg-white">
-                                <form class="input-group">
-                                    <input type="text" placeholder="Search" class="form-control border-light">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
-                                    </div>
-                                </form>
+                                <input name="Search" type="text" placeholder="Search" class="form-control border-light">    
                             </div>
                         </li>
                     </ul>
                 </div>
-                @guest
-                    @if (Route::has('register'))
-                    <div class="sign-up">
+
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="sign-up">
                         <span> Sign up</span>
-                    </div>
-                    @endif
-                @endguest
+                    </a>
+                @endif
                 <div class="mobile-header-profile-menu">
                     <!-- profile picture end -->
                     <div class="profile-thumb profile-setting-box">
@@ -284,22 +197,25 @@
                                 <div class="profile-body">
                                     <ul>
                                         <li>
-                                            <div class="profile-head p-0">
-                                                <h5 class="name"><a href="#">{{ Auth::user()->name }}</a></h5>
-                                                <a class="mail" href="#">{{ Auth::user()->email }}</a>
+                                            <div class="profile-head py-0">
+                                                <h5>{{ Auth::user()->name }}</h5>
+                                                <small>{{ Auth::user()->email }}</small>
                                             </div>
                                         </li>
                                         <li><hr></li>
-                                        <li><a href="#"><i class="fa fa-cog"></i>Setting</a></li>
+                                        <li><a href="{{ route('profile') }}"><i class="fa fa-cog"></i>Setting</a></li>
                                         <li>
                                             <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();" >
-                                                <i class="fa fa-sign-out-alt"></i>Sign out
-                                            </a>
+                                                <i class="fa fa-sign-out-alt"></i>Sign out</a>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                                 @csrf
                                             </form>
                                         </li>
+                                    </ul>
+                                </div>
+                                <div class="profile-body">
+                                    <ul>
                                         @foreach (getPage() as $page)
                                             <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
                                         @endforeach
@@ -312,6 +228,7 @@
                 </div>
             </div>
         </div>
+        @if (Route::currentRouteName()=='')
         <div class="col-12 sticky category-nav bg-white">
             <div class="col-lg-6 offset-md-3 d-block d-md-flex p-0">
                 <div style="flex:3" class="header-top-navigation">
@@ -323,7 +240,6 @@
                         </ul>
                     </nav>
                 </div>
-
                 <div style="flex:1" class="ml-md-5 ml-0 d-flex text-nowrap align-items-center justify-content-between font-weight-bold">
                     Sort By
                     <select id="sortType" class="text-warning bg-transparent border-0 font-weight-bold">
@@ -334,14 +250,15 @@
                         <option value="5">Most Comments All Time</option>
                     </select>
                 </div>
-
             </div>
         </div>
+        @endif
     </header>
     <!-- header area end -->
     <main>
         <div class="main-wrapper pt-3">
             <div class="container-fluid">
+                
                 <div class="row">
 
                     <div class="col-lg-3 order-2 order-lg-1">
@@ -366,8 +283,8 @@
                     @yield('content')
 
                     <div class="col-lg-3 order-3">
+                        @if (Route::currentRouteName()=='')
                         <aside class="widget-area">
-
                             <div class="card widget-item">
                                 <h4 class="widget-title mb-4">What's Happening</h4>
                                 <div class="widget-body">
@@ -391,6 +308,7 @@
                                 </div>
                             </div>
                         </aside>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -442,8 +360,10 @@
        if(height==0){
             height=document.querySelectorAll('.mobile-header-wrapper')[0].clientHeight;
        }
-       $('.category-nav').css('margin-top',height+'px');
-       height+=document.querySelectorAll('.category-nav')[0].clientHeight;
+       if($('.category-nav').length>0){
+            $('.category-nav').css('margin-top',height+'px');
+            height+=document.querySelectorAll('.category-nav')[0].clientHeight;
+       }
        $('header').first().css({
            'height':height+'px',
            'width':'100%',
@@ -451,6 +371,7 @@
            'z-index':'1000'
         });
        $('.main-wrapper').parent().css('padding-top',height+'px');
+       $('#search_result').css('top',height+'px');
 
         $('#sortType').on('change',function(){
             fetchRecords();
@@ -460,18 +381,42 @@
                 fetchRecords();
             }
 
-            // Search by userid
-            // $('#but_search').click(function(){
-                // var search = Number($('#search').val().trim());
-                var search = "Corru";
-                $.ajax({
-                    url: "{{URL('/')}}/search/"+search,
-                    type: 'get',
-                    dataType: 'json',
-                    success: function(response){
-                        console.log(response);
-                    }
-                // });
+            // Search by keyword
+             $('input[name="Search"]').on('keyup',function(){
+                 if($(this).val().length>3){
+                    var search=$(this).val().trim();
+                    $.ajax({
+                        url: "{{URL('/')}}/search/"+search,
+                        type: 'get',
+                        dataType: 'json',
+                        success: function(response){
+                            console.log(response);
+                            var len = 0;
+                            $('#search_result').empty();
+                            $('#search_result').removeClass('active');
+                            if(response['data'] != null){
+                                len = response['data'].length;
+                            }
+                            if(len > 0){
+                                var build='';
+                                for(var i=0; i<len; i++){
+                                    build+='<a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'"><div class="d-flex align-items-center">'+
+                                            '<div style="flex:1; padding:10px;"><img class="rounded" src="{{URL("/")}}/'+ response['data'][i].image +'"></div>'+
+                                            '<div style="flex:4">'+
+                                                '<p class="font-weight-bold mb-0">'+response['data'][i].title +'</p>'+
+                                                '<small>'+ timeSince(new Date(response['data'][i].created_at))+'</small>'+
+                                            '</div>'+
+                                        '</div></a><hr class="my-1">';
+                                }
+                                $('#search_result').html(build);
+                                $('#search_result').addClass('active');
+                            }
+                        }
+                    });
+                 }else{
+                    $('#search_result').empty();
+                    $('#search_result').removeClass('active');
+                 }
             });
         });
 
