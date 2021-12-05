@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-md-12 mediaVideo d-none">
                         <div class="form-group">
-                            <textarea class="form-control" name="videoUpload" id="formGroupFileInput"></textarea>
+                            <input class="form-control" name="videoUpload" placeholder="Please provide youtube video id" id="formGroupFileInput">
                         </div>
                     </div>
                 </div>

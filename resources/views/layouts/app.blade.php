@@ -291,17 +291,23 @@
                                     <ul class="like-page-list-wrapper">
                                         @foreach (getFeaturedPost() as $post)
                                             <li class="unorder-list align-items-center justify-content-between">
+                                            <a href="{{URL('/')}}/singlepost/{{$post->id}}">
                                                 <div class="unorder-list-info pl-0 pr-2">
                                                     <p class="list-title">{{$post->Category->name}} - {{$post->created_at->diffForHumans()}}</p>
                                                     <h3 class="list-subtitle"><a href="{{URL("/").'/singlepost/'. $post->id}}">{{$post->title}}</a></h3>
                                                 </div>
                                                 <div class="profile-thumb">
-                                                    <a href="#">
+                                                    
                                                         <figure class="">
-                                                            <img  style="width:70px; border-radius:5px;" src="{{ asset($post->image)}}" alt="profile picture">
+                                                        @if (strpos($post->image, 'postimage') !== false)
+                                                            <img src="{{asset($post->image)}}" alt="{{ $post->image }}" style="width:70px; border-radius:5px;">
+                                                        @else
+                                                            <img src="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg" style="width:70px; border-radius:5px;">
+                                                        @endif
                                                         </figure>
-                                                    </a>
+                                                   
                                                 </div>
+                                                </a>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -377,7 +383,7 @@
             fetchRecords();
         });
         $(document).ready(function(){
-            if($(location).attr("href").indexOf("singlepost")==-1){
+            if($(location).attr("href").indexOf("singlepost")==-1 && $(location).attr("href").indexOf("bookmark")==-1){
                 fetchRecords();
             }
 
@@ -477,9 +483,14 @@
                                         '</p>'+
                                         '<div class="post-thumb-gallery">' +
                                             '<figure class="post-thumb img-popup">' +
-                                                '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id + '">'+
-                                                    '<img src="{{URL("/")}}/'+ response['data'][i].image +' " alt="'+ response['data'][i].id +'">'+
-                                                '</a>'+
+                                                '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id + '">';
+                                                if(response['data'][i].image.indexOf("postimage")==-1){
+                                                    tr_str +='<iframe width="100%" height="400" src="https://www.youtube.com/embed/'+ response['data'][i].image +'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                                                }else{
+                                                    tr_str +='<img src="{{URL("/")}}/'+ response['data'][i].image +' " alt="'+ response['data'][i].id +'">';
+                                                }
+                                                    
+                                tr_str +='</a>'+
                                             '</figure>'+
                                         '</div>' +
                                         '<div class="post-meta p-0">' +

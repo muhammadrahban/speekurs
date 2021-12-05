@@ -20,7 +20,11 @@
                                 <p>{{$post->created_at->diffForHumans()}}</p>
                                 <div class="post-thumb-gallery">
                                     <figure class="post-thumb">
-                                        <img src="{{ asset($post->image)}}" alt="post image">
+                                    @if (strpos($post->image, 'postimage') !== false)
+                                        <img src="{{asset($post->image)}}" alt="{{ $post->image }}">
+                                    @else
+                                        <iframe width="100%" height="400" src="https://www.youtube.com/embed/{{$post->image}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    @endif
                                     </figure>
                                 </div>
                                 <p class="pt-4">{{$post->description}}</p>

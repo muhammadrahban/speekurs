@@ -32,14 +32,16 @@
                 <tbody>
                     @foreach ($posts as $post)
                         <tr>
-                            <td>{{ $post->id }}</td>
+                            <td>{{ $post->id }}
+                                <i class=" {{ ($post->featured == '1') ? 'fa fa-star text-primary' : '' }} "></i>
+                            </td>
                             <td>
-                            @if (strpos($post->image, 'iframe')==true)
-                                <i class="fa fa-play fa-3x"></i>
+                            @if (strpos($post->image, 'postimage') !== false)
+                                <img src="{{asset($post->image)}}" alt="{{ $post->image }}" height="70" class="img-fluid rounded">
                             @else
-                                <img src="{{asset($post->image)}}" alt="{{ $post->image }}" width="30" height="30" class="rounded-circle">
+                                <img src="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg" alt="{{ $post->image }}" height="70" class="img-fluid rounded">
                             @endif
-                             <i class=" {{ ($post->featured == '1') ? 'fa fa-star text-primary' : '' }} "></i>
+                             
                             </td>
                             <td><a href="{{ route('post.show', $post->id) }}">{{ $post->title }}</a></td>
                             <td>{{ $post->sub_title }}</td>
