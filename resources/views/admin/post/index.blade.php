@@ -41,7 +41,7 @@
                             @endif
                              <i class=" {{ ($post->featured == '1') ? 'fa fa-star text-primary' : '' }} "></i>
                             </td>
-                            <td>{{ $post->title }}</td>
+                            <td><a href="{{ route('post.show', $post->id) }}">{{ $post->title }}</a></td>
                             <td>{{ $post->sub_title }}</td>
                             <td>{{ $post->created_at->diffForHumans() }}</td>
                             <td><a href="{{ route('post.edit', $post->id)}}" title="Edit"><button class="btn btn-primary btn-sm">EDIT</button></a></td>
