@@ -60,16 +60,9 @@
 
                     <!-- search -->
                     <div class="col-md-4">
-<<<<<<< HEAD
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-transparent"><i class="fa fa-search"></i></span>
-=======
-                        <form class="input-group">
-                            <input type="text" placeholder="Search" id="search_text" class="form-control border-light">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary border-light"><i class="fa fa-search"></i></button>
->>>>>>> 324eefb015cba85b42b1b497086aecdb1cefd1dd
                             </div>
                             <input name="Search" type="text" placeholder="Search" class="form-control border-muted">
                         </div>
@@ -105,7 +98,6 @@
                         <!-- nav links end -->
                     @else
                         <div class="col-md-4">
-<<<<<<< HEAD
                             <div class="header-top-navigation font-weight-bold">
                                 <nav>
                                     <ul class="d-flex align-items-center justify-content-end">
@@ -128,27 +120,6 @@
                                                             <span class="mb-0 font-weight-bold text-dark">{{ Auth::user()->name }}</span>
                                                             <small class="d-block text-dark">{{ Auth::user()->email }}</small>
                                                         </div>
-=======
-                            <div class="profile-setting-box">
-                                <div class="profile-thumb-small">
-                                    <a href="javascript:void(0)" class="profile-triger">
-                                        <figure>
-                                            <img src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
-                                        </figure>
-                                    </a>
-                                    <div class="profile-dropdown">
-                                        <div class="profile-head">
-                                            <h5 class="name"><a href="#">{{ Auth::user()->name }}</a></h5>
-                                            <a class="mail" href="#">{{ Auth::user()->email }}</a>
-                                        </div>
-                                        <div class="profile-body">
-                                            <ul>
-                                                <li><a href="{{route('account')}}"><i class="fa fa-cog"></i>Setting</a></li>
-                                                <li>
-                                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();" >
-                                                        <i class="fa fa-sign-out-alt"></i>Sign out
->>>>>>> 324eefb015cba85b42b1b497086aecdb1cefd1dd
                                                     </a>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownProfile">
                                                         <a class="dropdown-item"  href="{{ route('profile') }}">
@@ -232,11 +203,7 @@
                                             </div>
                                         </li>
                                         <li><hr></li>
-<<<<<<< HEAD
                                         <li><a href="{{ route('profile') }}"><i class="fa fa-cog"></i>Setting</a></li>
-=======
-                                        <li><a href="{{ route('account') }}"><i class="fa fa-cog"></i>Setting</a></li>
->>>>>>> 324eefb015cba85b42b1b497086aecdb1cefd1dd
                                         <li>
                                             <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();" >
