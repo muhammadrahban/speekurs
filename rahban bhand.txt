@@ -1,6 +1,6 @@
 Backend
 	1.forgot email issue DONE
-	2.Search DONE 50%
+	2.Search DONE 50% (search input box par event keyup laga diya hy data bhi responce ma raha hy ab ui bata kar display krwana hy)
 
 TODO UI
 	Edit Profile Page

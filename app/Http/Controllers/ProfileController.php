@@ -25,7 +25,7 @@ class ProfileController extends Controller
     }
 
     public function setaccount(Request $request){
-
+        dd($request->all());
         return redirect()->back();
     }
 }

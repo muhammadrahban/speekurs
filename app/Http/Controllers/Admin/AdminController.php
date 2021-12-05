@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Post;
+use App\User;
 
 class AdminController extends Controller
 {
@@ -23,6 +25,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.home');
+        $data['posts'] = Post::get()->count();
+        $data['user_active'] = User::where('status', 1)->get()->count();
+        $data['user_deactive'] = User::where('status', 0)->get()->count();
+        return view('admin.home', compact('data'));
     }
 }

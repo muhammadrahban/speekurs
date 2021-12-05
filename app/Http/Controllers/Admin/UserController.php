@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use App\Post;
 use Auth;
 
 class UserController extends Controller
@@ -39,7 +40,10 @@ class UserController extends Controller
 
     public function getactivity($id){
         $users = User::find($id);
-        // dd($users);
+        $postLike = Post::withCount(['like' => function($query) use ($id){
+            $query->orWhere('likes.user_id', $id);
+        }])->get();
+        dd($postLike);
         return view('admin.user.activity');
     }
 }

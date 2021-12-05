@@ -101,7 +101,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::with('commentUser')->withCount('like')->where('id' ,$id)->get();
+        return view('admin.post.show', compact('post'));
     }
 
     /**

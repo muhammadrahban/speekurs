@@ -11,7 +11,7 @@ class Post extends Model
     ];
 
     public function Category(){
-        return $this->belongsTo( Category::class, 'category_id', 'id' );
+        return $this->belongsTo(Category::class, 'category_id', 'id' );
     }
 
     function like(){
@@ -31,8 +31,7 @@ class Post extends Model
         return $this->hasMany(Bookmark::class, 'post_id', 'id');
     }
 
-    // function post(){
-    //     $user_id = Auth::user()->id;
-    //     return $this->belongsTo(Post::class, 'post_id', 'id');
-    // }
+    function commentUser(){
+        return $this->hasManyThrough(User::class, Comment::class,  'post_id', 'id', 'id', 'id');
+    }
 }
