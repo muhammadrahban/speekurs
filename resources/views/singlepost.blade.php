@@ -65,8 +65,12 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a>
-                                                <i class="chosenShareIcon align-middle fa fa-2x fa-share" data-post-id="{{$post->id}}"></i>
+                                            @if (strpos($post->image, 'postimage') !== false)
+                                                <a data-share-link="{{URL('/').'/singlepost/'.$post->id}}" data-title="{{$post->title}}" data-image="{{asset($post->image)}}">
+                                            @else
+                                                <a data-share-link="{{URL('/').'/singlepost/'.$post->id}}" data-title="{{$post->title}}" data-image="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg">
+                                            @endif
+                                                <i class="chosenShareIcon align-middle fa fa-2x fa-share"></i>
                                             </a>
                                         </li>
                                     </ul>
@@ -157,6 +161,41 @@
 
                 });
             @endguest
+        });
+
+        //Share
+        $('a[data-share-link]').on('click',function(){
+            var link=$(this).attr('data-share-link');
+            var title=$(this).attr('data-title');
+            var image=$(this).attr('data-image');
+            $('#shareDialog .modal-body').find('input').val(link);
+            $('#shareDialog .modal-body').find('h5').text(title);
+            $('#shareDialog .modal-body').find('img').attr('src',image);
+            $('#shareDialog').modal('show');
+        });
+        $('.copy-link').on('click',function(){
+            var obj=$(this);
+            var link=$('#shareDialog .modal-body').find('input').val();
+            navigator.clipboard.writeText(link).then(function() {
+                $(obj).find('small').text('Copied')
+                setTimeout(function(){
+                    $(obj).find('small').text('Copy Link');
+                },3000);
+            }, function(err) {
+                alert('Async: Could not copy link');
+            });
+        });
+        $('.share-twitter').on('click',function(){
+            var link=$('#shareDialog .modal-body').find('input').val();
+            var title=$('#shareDialog .modal-body').find('h5').text();
+            var url='http://www.twitter.com/intent/tweet?url='+link+'&text='+title;
+            window.open(url,'_blank');
+        });
+        $('.share-facebook').on('click',function(){
+            var link=$('#shareDialog .modal-body').find('input').val();
+            var title=$('#shareDialog .modal-body').find('h5').text();
+            var url='http://www.facebook.com/sharer/sharer.php?u='+link+'&t='+title;
+            window.open(url,'_blank');
         });
     }
 </script>

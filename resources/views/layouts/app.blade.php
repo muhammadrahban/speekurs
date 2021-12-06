@@ -294,7 +294,7 @@
                                             <a href="{{URL('/')}}/singlepost/{{$post->id}}">
                                                 <div class="unorder-list-info pl-0 pr-2">
                                                     <p class="list-title">{{$post->Category->name}} - {{$post->created_at->diffForHumans()}}</p>
-                                                    <h3 class="list-subtitle"><a href="{{URL("/").'/singlepost/'. $post->id}}">{{$post->title}}</a></h3>
+                                                    <h3 class="list-subtitle"><a href="{{URL('/').'/singlepost/'. $post->id}}">{{$post->title}}</a></h3>
                                                 </div>
                                                 <div class="profile-thumb">
                                                     
@@ -328,10 +328,44 @@
         <i class="bi bi-finger-index"></i>
     </div>
     <!-- Scroll to Top End -->
-
+    <div class="modal fade" id="shareDialog" tabindex="-1" role="dialog">
+        <div class="modal-dialog  modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Share this post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="border-light rounded d-flex">
+                    <img height="70" width="70" style="object-fit:cover;" src="">
+                    <div class="ml-3">
+                        <h5></h5>
+                        <input readonly class="border-0 p-0 m-0 w-100">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <div class="text-center copy-link">
+                    <button type="button" class="btn btn-light rounded"><i class="fa fa-link"></i></button>
+                    <small class="d-block">Copy Link</small>
+                </div>
+                <div class="text-center share-twitter">
+                    <button type="button" class="btn btn-light rounded"><i class="fab fa-twitter"></i></button>
+                    <small class="d-block">Twitter</small>
+                </div>
+                <div class="text-center share-facebook">
+                    <button type="button" class="btn btn-light rounded"><i class="fa fa-thumbs-up"></i></button>
+                    <small class="d-block">Facebook</small>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
     <!-- JS
 ============================================ -->
-
+    <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
     <!-- Modernizer JS -->
     <script src="{{ asset('assets/front/js/vendor/modernizr-3.6.0.min.js ')}}"></script>
     <!-- jQuery JS -->
@@ -356,8 +390,6 @@
     <script src="{{ asset('assets/front/js/plugins/isotope.pkgd.min.js ')}}"></script>
     <!-- Main JS -->
     <script src="{{ asset('assets/front/js/main.js ')}}"></script>
-
-    <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
 
      <script type='text/javascript'>
 
@@ -484,10 +516,13 @@
                                         '<div class="post-thumb-gallery">' +
                                             '<figure class="post-thumb img-popup">' +
                                                 '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id + '">';
+                                                var shareAttr="";
                                                 if(response['data'][i].image.indexOf("postimage")==-1){
+                                                    shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="https://i.ytimg.com/vi/'+ response['data'][i].image +'/hq720.jpg"';
                                                     tr_str +='<iframe width="100%" height="400" src="https://www.youtube.com/embed/'+ response['data'][i].image +'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
                                                 }else{
-                                                    tr_str +='<img src="{{URL("/")}}/'+ response['data'][i].image +' " alt="'+ response['data'][i].id +'">';
+                                                    shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="{{URL("/")}}/'+ response['data'][i].image +'"';
+                                                    tr_str +='<img src="{{URL("/")}}/'+ response['data'][i].image +'" alt="'+ response['data'][i].id +'">';
                                                 }
                                                     
                                 tr_str +='</a>'+
@@ -511,7 +546,7 @@
                                                     '</a>'+
                                                 '</li>'+
                                                 '<li>'+
-                                                    '<a>'+
+                                                    '<a '+shareAttr+'>'+
                                                         '<i class="chosenShareIcon align-middle fa fa-2x fa-share" data-post-id="'+ response['data'][i].id + '"></i>'+
                                                     '</a>'+
                                                 '</li>'+
@@ -580,6 +615,41 @@
 
                                 });
                             @endguest
+                        });
+
+                        //Share
+                        $('a[data-share-link]').on('click',function(){
+                            var link=$(this).attr('data-share-link');
+                            var title=$(this).attr('data-title');
+                            var image=$(this).attr('data-image');
+                            $('#shareDialog .modal-body').find('input').val(link);
+                            $('#shareDialog .modal-body').find('h5').text(title);
+                            $('#shareDialog .modal-body').find('img').attr('src',image);
+                            $('#shareDialog').modal('show');
+                        });
+                        $('.copy-link').on('click',function(){
+                            var obj=$(this);
+                            var link=$('#shareDialog .modal-body').find('input').val();
+                            navigator.clipboard.writeText(link).then(function() {
+                                $(obj).find('small').text('Copied')
+                                setTimeout(function(){
+                                    $(obj).find('small').text('Copy Link');
+                                },3000);
+                            }, function(err) {
+                                alert('Async: Could not copy link');
+                            });
+                        });
+                        $('.share-twitter').on('click',function(){
+                            var link=$('#shareDialog .modal-body').find('input').val();
+                            var title=$('#shareDialog .modal-body').find('h5').text();
+                            var url='http://www.twitter.com/intent/tweet?url='+link+'&text='+title;
+                            window.open(url,'_blank');
+                        });
+                        $('.share-facebook').on('click',function(){
+                            var link=$('#shareDialog .modal-body').find('input').val();
+                            var title=$('#shareDialog .modal-body').find('h5').text();
+                            var url='http://www.facebook.com/sharer/sharer.php?u='+link+'&t='+title;
+                            window.open(url,'_blank');
                         });
                     }else{
                         var tr_str = "<tr>" +
