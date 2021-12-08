@@ -227,14 +227,14 @@
         </div>
         
         @if (Route::currentRouteName()=='')
-        <div class="col-12 sticky category-nav bg-white">
+        <div class="col-12 sticky nav-bottom bg-white">
              @guest
             <h5 class="mx-auto my-5 col-lg-6 m-0 text-center">
                 Keep up with interesting news, opinions and discussions at Speekur. 
                 <a href="{{ route('register') }}" class="text-primary">Sign up</a> to comment, save and share
             </h5>
             @endguest
-            <div class="col-lg-6 offset-md-3 d-block d-md-flex p-0">
+            <div class="col-lg-6 offset-md-3 d-block d-md-flex p-0 category-nav">
                 <div style="flex:3" class="header-top-navigation">
                     <nav class="font-weight-bold">
                         <ul class="d-flex flex-wrap justify-content-start">
@@ -405,9 +405,9 @@
             height=document.querySelectorAll('.mobile-header-wrapper')[0].clientHeight;
        }
        $('#search_result').css('top',height+'px');
-       if($('.category-nav').length>0){
-            $('.category-nav').css('margin-top',height+'px');
-            height+=document.querySelectorAll('.category-nav')[0].clientHeight;
+       if($('.nav-bottom').length>0){
+            $('.nav-bottom').css('margin-top',height+'px');
+            height+=document.querySelectorAll('.nav-bottom')[0].clientHeight;
        }
        $('header').first().css({
            'height':height+'px',
