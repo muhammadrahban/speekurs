@@ -5,9 +5,15 @@
     <div class="p-0">
         <h3 class="text-center mt-5">Account Settings</h3>
         <div class="card-body">
-            @if (session('status'))
+            @if (session('success'))
                 <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-dunger" role="alert">
+                    {{ session('error') }}
                 </div>
             @endif
             <form method="POST" action="{{ route('setaccount') }}">

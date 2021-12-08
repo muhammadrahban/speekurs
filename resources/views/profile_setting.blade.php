@@ -20,19 +20,19 @@
                     <div class="col-4 text-center text-md-right font-weight-bold text-primary">Change Photo</div>
 
                 </div>
-                  
+
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('name') is-invalid @enderror">
                     <label>{{ __('Display Name') }}</label>
                     <input type="name" class="form-control border-0 p-0" name="name" value="{{Auth::user()->name}}" required>
                 </div>
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('dob') is-invalid @enderror">
                     <label>{{ __('Date of Birth') }}</label>
-                    <input type="date" class="form-control border-0 p-0" name="dob" value="{{Auth::user()->created_at}}" required>
+                    <input type="date" class="form-control border-0 p-0" name="dob" value="{{Auth::user()->dob}}" required>
                 </div>
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('dob') is-invalid @enderror">
                     <label>{{ __('Country') }}</label>
-                    <select class="form-control border-0 p-0" name="county" required>
-                        <option value="Australia">Australia</option>    
+                    <select class="form-control border-0 p-0" name="county" required value="{{Auth::user()->country}}">
+                        <option value="Australia">Australia</option>
                         <option value="China">China</option>
                         <option value="Pakistan">Pakistan</option>
                         <option value="India">India</option>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-            </form>         
+            </form>
         </div>
     </div>
 </div>
