@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title' )
 @section('content')
-<div class="col-lg-6 order-1 order-lg-2">
+<div class="col-lg-6 order-1 order-lg-2 pt-3">
     <div class="p-0">
         <h3 class="text-center mt-5">Edit Profile</h3>
         <div class="card-body">

@@ -77,12 +77,12 @@
                                 <nav>
                                     <ul>
                                         @if (Route::has('register'))
-                                            <li><a class="nav-link pr-4" href="{{ route('register') }}">Signup</a></li>
+                                            <li><a class="btn btn-primary" href="{{ route('register') }}">Sign up</a></li>
                                         @endif
                                         <li ><a class="nav-link pr-4" href="{{ route('login') }}">Login</a></li>                                        
                                         <li>
                                             <div class="dropdown">
-                                                <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
+                                                <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <i style="font-size: 21px;" class="align-top fa fa-caret-down text-primary"></i></a>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                   @foreach (getPage() as $page)
                                                     <a class="dropdown-item" href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a>
@@ -102,16 +102,6 @@
                                 <nav>
                                     <ul class="d-flex align-items-center justify-content-end">
                                         <li>
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                  @foreach (getPage() as $page)
-                                                    <a class="dropdown-item" href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a>
-                                                  @endforeach
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
                                             <div class="profile-setting-box text-left">
                                                 <div class="dropdown ">
                                                     <a class="d-flex" role="button" type="button" class="btn" data-toggle="dropdown"> 
@@ -120,15 +110,22 @@
                                                             <span class="mb-0 font-weight-bold text-dark">{{ Auth::user()->name }}</span>
                                                             <small class="d-block text-dark">{{ Auth::user()->email }}</small>
                                                         </div>
+                                                        <i style="font-size: 21px;" class="align-top fa fa-caret-down text-primary"></i>
                                                     </a>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownProfile">
-                                                        <a class="dropdown-item"  href="{{ route('profile') }}">
-                                                            <i class="fa fa-cog"></i>Setting</a>
-                                                        <a class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" >
-                                                            <i class="fa fa-sign-out-alt"></i>Sign out</a>
-                                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                            @csrf
-                                                        </form>
+                                                        @foreach (getPage() as $page)
+                                                            <a class="dropdown-item px-2" href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a>
+                                                        @endforeach
+                                                        <a class="dropdown-item px-2"  href="{{ route('profile') }}">
+                                                            <i class="fa fa-cog mr-2"></i> Account
+                                                        </a>
+                                                        <a class="dropdown-item px-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" >
+                                                            <i class="fa fa-sign-out-alt mr-2"></i> Sign out
+                                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                                @csrf
+                                                            </form>
+                                                        </a>
+                                                        
                                                     </div>
                                                 </div>
                                                
@@ -167,31 +164,33 @@
                     </ul>
                 </div>
 
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="sign-up">
-                        <span> Sign up</span>
-                    </a>
-                @endif
+                
                 <div class="mobile-header-profile-menu">
                     <!-- profile picture end -->
                     <div class="profile-thumb profile-setting-box">
                         @guest
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="btn btn-primary">
+                                    <span> Sign up</span>
+                                </a>
+                            @endif
                             <a href="javascript:void(0)" class="profile-triger">
                                 <i class="fa fa-2x fa-bars"></i>
                             </a>
                             <div class="profile-dropdown text-left">
-                            <div class="profile-body">
-                                <ul>
-                                    <li ><a href="{{ route('login') }}">Login</a></li>
-                                    @foreach (getPage() as $page)
-                                        <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                                <div class="profile-body">
+                                    <ul>
+                                        <li ><a href="{{ route('login') }}">Login</a></li>
+                                        @foreach (getPage() as $page)
+                                            <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         @else
                             <a href="javascript:void(0)" class="profile-triger">
                                 <img height="40" class="avatar" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
+                                <i class="fa fa-2x ml-2 align-middle fa-bars"></i>
                             </a>
                             <div class="profile-dropdown text-left">
                                 <div class="profile-body">
@@ -203,19 +202,17 @@
                                             </div>
                                         </li>
                                         <li><hr></li>
-                                        <li><a href="{{ route('profile') }}"><i class="fa fa-cog"></i>Setting</a></li>
+                                        <li><a href="{{ route('profile') }}"><i class="fa fa-cog"></i>Account</a></li>
                                         <li>
                                             <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();" >
-                                                <i class="fa fa-sign-out-alt"></i>Sign out</a>
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                @csrf
-                                            </form>
+                                                <i class="fa fa-sign-out-alt"></i>Sign out
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                    @csrf
+                                                </form>
+                                            </a>
                                         </li>
-                                    </ul>
-                                </div>
-                                <div class="profile-body">
-                                    <ul>
+                                        <li><hr></li>
                                         @foreach (getPage() as $page)
                                             <li ><a href="{{ url('/page', $page->slug) }}">{{ $page->title }}</a></li>
                                         @endforeach
@@ -228,21 +225,28 @@
                 </div>
             </div>
         </div>
+        
         @if (Route::currentRouteName()=='')
         <div class="col-12 sticky category-nav bg-white">
+             @guest
+            <h5 class="mx-auto my-5 col-lg-6 m-0 text-center">
+                Keep up with interesting news, opinions and discussions at Speekur. 
+                <a href="{{ route('register') }}" class="text-primary">Sign up</a> to comment, save and share
+            </h5>
+            @endguest
             <div class="col-lg-6 offset-md-3 d-block d-md-flex p-0">
                 <div style="flex:3" class="header-top-navigation">
                     <nav class="font-weight-bold">
-                        <ul class="d-flex flex-wrap justify-content-between">
+                        <ul class="d-flex flex-wrap justify-content-start">
                             @foreach (getCategories() as $key => $value)
-                                <li class="{{ ($key==0)? 'active':'' }}" id="cat_tab_{{ $value->id }}" data-category="{{ $value->id }}"><a>{{ $value->name }}</a></li>
+                                <li class="mr-4 {{ ($key==0)? 'active':'' }}" id="cat_tab_{{ $value->id }}" data-category="{{ $value->id }}"><a>{{ $value->name }}</a></li>
                             @endforeach
                         </ul>
                     </nav>
                 </div>
                 <div style="flex:1" class="ml-md-5 ml-0 d-flex text-nowrap align-items-center justify-content-between font-weight-bold">
                     Sort By
-                    <select id="sortType" class="text-warning bg-transparent border-0 font-weight-bold">
+                    <select id="sortType" class="text-primary bg-transparent border-0 font-weight-bold">
                         <option value="1">Most Recent</option>
                         <option value="2">Most Liked This Week</option>
                         <option value="3">Most Liked All Time</option>
@@ -256,27 +260,27 @@
     </header>
     <!-- header area end -->
     <main>
-        <div class="main-wrapper pt-3">
+        <div class="main-wrapper">
             <div class="container-fluid">
                 
                 <div class="row">
-
                     <div class="col-lg-3 order-2 order-lg-1">
                         @guest
-
                         @else
-                            <div class="card widget-item">
-                                <div class="widget-body">
-                                    <ul class="like-page-list-wrapper">
-                                        <li class="unorder-list align-items-center">
-                                            <h3 class="list-title"><a href="{{URL('/')}}">home</a></h3>
+                            <aside class="widget-area side-bar-sticky pt-3">
+                                <div class="card p-0">
+                                    <ul>
+                                        <li class="p-3 unorder-list align-items-center">
+                                            <i style="width:35px"  class="fa fa-2x fa-house-user text-center mr-2"></i>
+                                            <h6 class="m-0"><a href="{{URL('/')}}">HOME</a></h6>
                                         </li>
-                                        <li class="unorder-list align-items-center">
-                                            <h3 class="list-title"><a href="{{URL('/bookmark')}}">Bookmark</a></h3>
+                                        <li class="p-3 unorder-list align-items-center">
+                                            <i style="width:35px" class="fa fa-2x fa-bookmark text-center mr-2"></i>
+                                            <h6 class="m-0"><a href="{{URL('/bookmark')}}">BOOKMARK</a></h6>
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
+                            </aside>
                         @endguest
                     </div>
 
@@ -284,29 +288,27 @@
 
                     <div class="col-lg-3 order-3">
                         @if (Route::currentRouteName()=='')
-                        <aside class="widget-area">
-                            <div class="card widget-item">
-                                <h4 class="widget-title mb-4">What's Happening</h4>
+                        <aside class="widget-area side-bar-sticky pt-3">
+                            <div class="card p-0">
+                                <h5 class="mb-2 p-3">What's Happening</h5>
                                 <div class="widget-body">
-                                    <ul class="like-page-list-wrapper">
+                                    <ul>
                                         @foreach (getFeaturedPost() as $post)
-                                            <li class="unorder-list align-items-center justify-content-between">
-                                            <a href="{{URL('/')}}/singlepost/{{$post->id}}">
-                                                <div class="unorder-list-info pl-0 pr-2">
-                                                    <p class="list-title">{{$post->Category->name}} - {{$post->created_at->diffForHumans()}}</p>
-                                                    <h3 class="list-subtitle"><a href="{{URL('/').'/singlepost/'. $post->id}}">{{$post->title}}</a></h3>
-                                                </div>
-                                                <div class="profile-thumb">
-                                                    
+                                            <li class="unorder-list">
+                                                <a href="{{URL('/')}}/singlepost/{{$post->id}}" class="p-3 w-100 widget-list-item d-flex justify-content-between">
+                                                    <div class="unorder-list-info pl-0 pr-2">
+                                                        <small class="d-block text-muted"><b>{{$post->Category->name}}</b> - {{$post->created_at->diffForHumans()}}</small>
+                                                        <h6>{{$post->title}}</h6>
+                                                    </div>
+                                                    <div class="profile-thumb">
                                                         <figure class="">
-                                                        @if (strpos($post->image, 'postimage') !== false)
-                                                            <img src="{{asset($post->image)}}" alt="{{ $post->image }}" style="width:70px; border-radius:5px;">
-                                                        @else
-                                                            <img src="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg" style="width:70px; border-radius:5px;">
-                                                        @endif
+                                                            @if (strpos($post->image, 'postimage') !== false)
+                                                                <img src="{{asset($post->image)}}" alt="{{ $post->image }}" style="width:70px; border-radius:5px;">
+                                                            @else
+                                                                <img src="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg" style="width:70px; border-radius:5px;">
+                                                            @endif
                                                         </figure>
-                                                   
-                                                </div>
+                                                    </div>
                                                 </a>
                                             </li>
                                         @endforeach
@@ -339,8 +341,8 @@
             </div>
             <div class="modal-body">
                 <div class="border-light rounded d-flex">
-                    <img height="70" width="70" style="object-fit:cover;" src="">
-                    <div class="ml-3">
+                    <img class="rounded" height="70" width="70" style="object-fit:cover;" src="">
+                    <div style="flex:4" class="ml-3">
                         <h5></h5>
                         <input readonly class="border-0 p-0 m-0 w-100">
                     </div>
@@ -348,16 +350,20 @@
             </div>
             <div class="modal-footer justify-content-start">
                 <div class="text-center copy-link">
-                    <button type="button" class="btn btn-light rounded"><i class="fa fa-link"></i></button>
+                    <button type="button" class="btn btn-light share-icon"><i class="fa fa-link"></i></button>
                     <small class="d-block">Copy Link</small>
                 </div>
                 <div class="text-center share-twitter">
-                    <button type="button" class="btn btn-light rounded"><i class="fab fa-twitter"></i></button>
+                    <button type="button" class="btn btn-light share-icon"><i class="fab fa-twitter"></i></button>
                     <small class="d-block">Twitter</small>
                 </div>
                 <div class="text-center share-facebook">
-                    <button type="button" class="btn btn-light rounded"><i class="fa fa-thumbs-up"></i></button>
+                    <button type="button" class="btn btn-light share-icon"><i class="fa fa-thumbs-up"></i></button>
                     <small class="d-block">Facebook</small>
+                </div>
+                <div class="text-center share-by-email">
+                    <button type="button" class="btn btn-light share-icon"><i class="fa fa-envelope"></i></button>
+                    <small class="d-block">Email</small>
                 </div>
             </div>
             </div>
@@ -398,6 +404,7 @@
        if(height==0){
             height=document.querySelectorAll('.mobile-header-wrapper')[0].clientHeight;
        }
+       $('#search_result').css('top',height+'px');
        if($('.category-nav').length>0){
             $('.category-nav').css('margin-top',height+'px');
             height+=document.querySelectorAll('.category-nav')[0].clientHeight;
@@ -409,7 +416,8 @@
            'z-index':'1000'
         });
        $('.main-wrapper').parent().css('padding-top',height+'px');
-       $('#search_result').css('top',height+'px');
+       $('.side-bar-sticky').css('top',height+'px');
+       
 
         $('#sortType').on('change',function(){
             fetchRecords();
@@ -491,66 +499,47 @@
                         for(var i=0; i<len; i++){
 
                             if(response['data'][i].isliked){
-                                var like_img='fa fa-2x fa-heart';
+                                var like_img='fa fa-2x fa-heart text-primary';
                             }else{
                                 var like_img='far fa-2x fa-heart';
                             }
 
-                            if(response['data'][i]['bookmark']){
-                                var bookmark_img='fa fa-2x fa-bookmark';
+                            if(response['data'][i].bookmark){
+                                var bookmark_img='far fa-2x fa-bookmark text-primary';
                             }else{
                                 var bookmark_img='far fa-2x fa-bookmark';
                             }
 
                             var tr_str =
-                                '<div class="card">'+
-                                    '<div class="post-title d-flex align-items-center">'+
-                                    '<div class="posted-author">'+
-                                            '<h6 class="author"><a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'">' + response['data'][i].title +'</a></h6>'+
-                                        '</div>'+
-                                    '</div>'+
-                                ' <div class="post-content">'+
-                                        '<p class="post-desc">'+
-                                            response['data'][i].sub_title +
-                                        '</p>'+
-                                        '<div class="post-thumb-gallery">' +
-                                            '<figure class="post-thumb img-popup">' +
-                                                '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id + '">';
-                                                var shareAttr="";
-                                                if(response['data'][i].image.indexOf("postimage")==-1){
-                                                    shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="https://i.ytimg.com/vi/'+ response['data'][i].image +'/hq720.jpg"';
-                                                    tr_str +='<iframe width="100%" height="400" src="https://www.youtube.com/embed/'+ response['data'][i].image +'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-                                                }else{
-                                                    shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="{{URL("/")}}/'+ response['data'][i].image +'"';
-                                                    tr_str +='<img src="{{URL("/")}}/'+ response['data'][i].image +'" alt="'+ response['data'][i].id +'">';
-                                                }
-                                                    
-                                tr_str +='</a>'+
-                                            '</figure>'+
-                                        '</div>' +
-                                        '<div class="post-meta p-0">' +
-                                            '<a>' +
+                                '<div class="card p-3">'+
+                                    '<h5><a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'">' + response['data'][i].title +'</a></h5>'+
+                                    '<p class="my-2">'+response['data'][i].sub_title +'</p>'+
+                                ' <div>'+    
+                                    '<figure>';
+                                        var shareAttr="";
+                                        if(response['data'][i].image.indexOf("postimage")==-1){
+                                            shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="https://i.ytimg.com/vi/'+ response['data'][i].image +'/hq720.jpg"';
+                                            tr_str +='<iframe class="w-100" height="350" src="https://www.youtube.com/embed/'+ response['data'][i].image +'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                                        }else{
+                                            shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="{{URL("/")}}/'+ response['data'][i].image +'"';
+                                            tr_str +='<a href="{{URL("/")}}/singlepost/' + response['data'][i].id + '"><img class="img-flex rounded w-100" height="350" src="{{URL("/")}}/'+ response['data'][i].image +'" alt="'+ response['data'][i].id +'"></a>';
+                                        }                  
+                                tr_str +='</figure>'+
+                                        '<div class="d-felx w-100 mt-3">' +
+                                            '<a class="post-icons mr-3">' +
                                                 '<i class="chosenHeartIcon align-middle mr-2 '+like_img+'" data-post-id="'+ response['data'][i].id + '"></i>' +
                                                 '<span id="count_'+ response['data'][i].id + '">'+ response['data'][i]['like'] + '</span>' +
                                             '</a>'+
-                                            '<ul class="comment-share-meta">' +
-                                                '<li>'+
-                                                    '<a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'" class="text-dark">'+
-                                                        '<i class="align-middle mr-2  fa fa-2x fa-comments"></i>' +
-                                                        '<span>'+ response['data'][i]['comments'] + '</span>'+
-                                                    '</a>'+
-                                                '</li>'+
-                                                '<li>'+
-                                                    '<a>'+
-                                                        '<i class="chosenBookmarkIcon align-middle '+bookmark_img+'" data-post-id="'+ response['data'][i].id + '"></i>'+
-                                                    '</a>'+
-                                                '</li>'+
-                                                '<li>'+
-                                                    '<a '+shareAttr+'>'+
-                                                        '<i class="chosenShareIcon align-middle fa fa-2x fa-share" data-post-id="'+ response['data'][i].id + '"></i>'+
-                                                    '</a>'+
-                                                '</li>'+
-                                            '</ul>'+
+                                            '<a class="post-icons mr-3" href="{{URL("/")}}/singlepost/' + response['data'][i].id +'">'+
+                                                '<i class="align-middle mr-2 far fa-2x fa-comments"></i>' +
+                                                '<span>'+ response['data'][i]['comments'] + '</span>'+
+                                            '</a>'+
+                                            '<a class="post-icons mr-3">'+
+                                                '<i class="chosenBookmarkIcon align-middle '+bookmark_img+'" data-post-id="'+ response['data'][i].id + '"></i>'+
+                                            '</a>'+
+                                            '<a class="post-icons mr-3" '+shareAttr+'>'+
+                                                '<i class="chosenShareIcon align-middle fa fa-2x fa-share" data-post-id="'+ response['data'][i].id + '"></i>'+
+                                            '</a>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>';
@@ -607,7 +596,7 @@
                                         var response=data[1].split(":")[0];
                                         var count=data[1].split(":")[1];
                                         if(response=='liked'){
-                                            $(obj).attr('class', 'chosenBookmarkIcon align-middle fa fa-2x fa-bookmark');
+                                            $(obj).attr('class', 'chosenBookmarkIcon align-middle far fa-2x fa-bookmark text-primary');
                                         }else if(response=='dislike'){
                                             $(obj).attr('class', 'chosenBookmarkIcon align-middle far fa-2x fa-bookmark');
                                         }
@@ -651,6 +640,12 @@
                             var url='http://www.facebook.com/sharer/sharer.php?u='+link+'&t='+title;
                             window.open(url,'_blank');
                         });
+                        $('.share-by-email').on('click',function(){
+                            var link=$('#shareDialog .modal-body').find('input').val();
+                            var title=$('#shareDialog .modal-body').find('h5').text();
+                            var url='mailto:?subject=Speekur&body='+title+',%0D%0A%0D%0ATo view the article please click the following link: '+link;
+                            window.open(url,'_blank');
+                        });
                     }else{
                         var tr_str = "<tr>" +
                             "<td align='center' colspan='4'>No record found.</td>" +
@@ -662,48 +657,8 @@
             });
         }
 
-        $('#submitComment').on('click',function(){
-            var message=$('#comment_input').val();
-            if(message.trim()!=""){
-                var postid=$('#comment_input').attr('data-postid');
-                $.ajax({
-                    type:"post",
-                    url:'{{URL('/')}}/setComment',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        'postid':postid,
-                        'comment':message,
-                        'p_comment':0
-                    },
-                    success: function(data){
-                        $('#comment_input').val("");
-                        if(data=='success'){
-                            getComments(postid);
-                        }
-                    }
-                })
-            }
-        });
-
-        $('#search_text').on('keyup',function(){
-            var message=$('#search_text').val();
-            var length = message.length;
-            if (length >= 2) {
-                // alert(message);
-                $.ajax({
-                    type:"get",
-                    url:'{{URL('/')}}/search/'+message,
-                    success: function(data){
-                        console.log(data)
-                    }
-                })
-            }
-        });
-
         function timeSince(date) {
-
             var seconds = Math.floor((new Date() - date) / 1000);
-
             var interval = seconds / 31536000;
 
             if (interval > 1) {
@@ -727,84 +682,7 @@
             }
             return Math.floor(seconds) + " seconds";
         }
-
-        function getComments(postid){
-            $.ajax({
-                type:"post",
-                url:"{{URL('/')}}/getComments",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'postid':postid
-                },
-                success: function(data){
-                    //console.log(data);
-
-                    var build='<div class="comment-parent">';
-                    for(var i=0;i<data.length;i++){
-                        if(data[i]['parent_comment_id']==0){
-                            build+='<div class="row b-t-1">'+
-                                    '<div class="col-1"><img class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'"></div>'+
-                                    '<div class="col-11">'+
-                                        '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+'</p>'+
-                                        '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                        '<small>'+ timeSince(new Date(data[i]['created_at']))+'</small>'+
-                                    '</div>'+
-                                '</div>';
-                            @guest
-                            @else
-                                build+='<div class="col-11 offset-1">'+
-                                    '<div class="input-group w-100">'+
-                                        '<input type="text" class="form-control border-0" id="comment_reply_'+data[i]['id']+'" placeholder="Reply">'+
-                                        '<div class="input-group-append">'+
-                                            '<button class="btn btn-outline-success" type="button" data-parent="'+data[i]['id']+'" data-relay-to="'+data[i]['post_id']+'">send</button>'+
-                                        '</div>'+
-                                    '</div>'+
-                                '</div>';
-                            @endguest
-                        }else{
-                            build+='<div class="child row ml-4">'+
-                                        '<div class="col-1"><img class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'"></div>'+
-                                        '<div class="col-11">'+
-                                            '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+'</p>'+
-                                            '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                            '<small>'+ timeSince(new Date(data[i]['created_at']))+'</small>'+
-                                        '</div>'+
-                                    '</div>';
-                        }
-
-                    }
-                    build+='</div>';
-                    //console.log(data);
-                   $('#comment_tree').html(build);
-
-                    $('*[data-relay-to]').on('click',function(){
-                        var postid=$(this).attr('data-relay-to');
-                        var parentcomment=$(this).attr('data-parent');
-                        var message=$('#comment_reply_'+parentcomment).val();
-                        if(message.trim()!=""){
-                            $.ajax({
-                                type:"post",
-                                url:'{{URL('/')}}/setComment',
-                                data: {
-                                    "_token": "{{ csrf_token() }}",
-                                    'postid':postid,
-                                    'comment':message,
-                                    'p_comment':parentcomment
-                                },
-                                success: function(data){
-                                    $('#comment_reply_'+parentcomment).val("");
-                                    if(data=='success'){
-                                        getComments(postid);
-                                    }
-                                }
-                            })
-                        }
-                    });
-                }
-            })
-        }
      </script>
-
 </body>
 
 </html>
