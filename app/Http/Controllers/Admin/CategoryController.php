@@ -110,6 +110,6 @@ class CategoryController extends Controller
     {
         $Category = Category::find($id);
         $Category->delete();
-        return redirect('/category')->with('success', 'Category deleted!');
+        return redirect('/admin/category')->with('success', 'Category deleted!');
     }
 }

@@ -79,7 +79,7 @@
                                         @if (Route::has('register'))
                                             <li><a class="btn btn-primary" href="{{ route('register') }}">Sign up</a></li>
                                         @endif
-                                        <li ><a class="nav-link pr-4" href="{{ route('login') }}">Login</a></li>                                        
+                                        <li ><a class="nav-link pr-4" href="{{ route('login') }}">Login</a></li>
                                         <li>
                                             <div class="dropdown">
                                                 <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <i style="font-size: 21px;" class="align-top fa fa-caret-down text-primary"></i></a>
@@ -104,7 +104,7 @@
                                         <li>
                                             <div class="profile-setting-box text-left">
                                                 <div class="dropdown ">
-                                                    <a class="d-flex" role="button" type="button" class="btn" data-toggle="dropdown"> 
+                                                    <a class="d-flex" role="button" type="button" class="btn" data-toggle="dropdown">
                                                         <img class="mx-2" height="40" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
                                                         <div>
                                                             <span class="mb-0 font-weight-bold text-dark">{{ Auth::user()->name }}</span>
@@ -125,16 +125,16 @@
                                                                 @csrf
                                                             </form>
                                                         </a>
-                                                        
+
                                                     </div>
                                                 </div>
-                                               
+
                                             </div>
                                         </li>
                                     </ul>
                                 </nav>
                             </div>
-                            
+
                         </div>
                     @endguest
 
@@ -158,13 +158,13 @@
                                 <i class="close-icon flaticon-cross-out"></i>
                             </span>
                             <div class="mob-search-box bg-white">
-                                <input name="Search" type="text" placeholder="Search" class="form-control border-light">    
+                                <input name="Search" type="text" placeholder="Search" class="form-control border-light">
                             </div>
                         </li>
                     </ul>
                 </div>
 
-                
+
                 <div class="mobile-header-profile-menu">
                     <!-- profile picture end -->
                     <div class="profile-thumb profile-setting-box">
@@ -225,12 +225,12 @@
                 </div>
             </div>
         </div>
-        
+
         @if (Route::currentRouteName()=='')
         <div class="col-12 sticky nav-bottom bg-white">
              @guest
             <h5 class="mx-auto my-5 col-lg-6 m-0 text-center">
-                Keep up with interesting news, opinions and discussions at Speekur. 
+                Keep up with interesting news, opinions and discussions at Speekur.
                 <a href="{{ route('register') }}" class="text-primary">Sign up</a> to comment, save and share
             </h5>
             @endguest
@@ -262,7 +262,7 @@
     <main>
         <div class="main-wrapper">
             <div class="container-fluid">
-                
+
                 <div class="row">
                     <div class="col-lg-3 order-2 order-lg-1">
                         @guest
@@ -285,7 +285,6 @@
                     </div>
 
                     @yield('content')
-
                     <div class="col-lg-3 order-3">
                         @if (Route::currentRouteName()=='')
                         <aside class="widget-area side-bar-sticky pt-3">
@@ -293,6 +292,7 @@
                                 <h5 class="mb-2 p-3">What's Happening</h5>
                                 <div class="widget-body">
                                     <ul>
+
                                         @foreach (getFeaturedPost() as $post)
                                             <li class="unorder-list">
                                                 <a href="{{URL('/')}}/singlepost/{{$post->id}}" class="p-3 w-100 widget-list-item d-flex justify-content-between">
@@ -417,7 +417,7 @@
         });
        $('.main-wrapper').parent().css('padding-top',height+'px');
        $('.side-bar-sticky').css('top',height+'px');
-       
+
 
         $('#sortType').on('change',function(){
             fetchRecords();
@@ -514,7 +514,7 @@
                                 '<div class="card p-3">'+
                                     '<h5><a href="{{URL("/")}}/singlepost/' + response['data'][i].id +'">' + response['data'][i].title +'</a></h5>'+
                                     '<p class="my-2">'+response['data'][i].sub_title +'</p>'+
-                                ' <div>'+    
+                                ' <div>'+
                                     '<figure>';
                                         var shareAttr="";
                                         if(response['data'][i].image.indexOf("postimage")==-1){
@@ -523,7 +523,7 @@
                                         }else{
                                             shareAttr='data-share-link="{{URL("/")}}/singlepost/' + response['data'][i].id +'" data-title="' + response['data'][i].title +'" data-image="{{URL("/")}}/'+ response['data'][i].image +'"';
                                             tr_str +='<a href="{{URL("/")}}/singlepost/' + response['data'][i].id + '"><img class="img-flex rounded w-100" height="350" src="{{URL("/")}}/'+ response['data'][i].image +'" alt="'+ response['data'][i].id +'"></a>';
-                                        }                  
+                                        }
                                 tr_str +='</figure>'+
                                         '<div class="d-felx w-100 mt-3">' +
                                             '<a class="post-icons mr-3">' +

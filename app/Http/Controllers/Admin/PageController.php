@@ -119,8 +119,8 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        $Post = Post::find($id);
-        $Post->delete();
-        return redirect('/page')->with('success', 'Page deleted!');
+        $page = Page::find($id);
+        $page->delete();
+        return redirect('/admin/page')->with('success', 'Page deleted!');
     }
 }

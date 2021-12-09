@@ -6,10 +6,10 @@
 
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h2 class="h3 mb-0 text-gray-800">User Activity</h2>
+        <h2 class="h3 mb-0 text-gray-800">User setting</h2>
     </div>
 	<div class="row">
-        <div class="col-md-12">
+        {{-- <div class="col-md-12">
             <ul class="nav nav-pills">
                 <li class="active"><a data-toggle="pill" href="#home">Posts Likes</a></li>
                 <li><a data-toggle="pill" href="#Comments">Posts Comments</a></li>
@@ -53,7 +53,7 @@
                     @endforeach
                 </div>
               </div>
-        </div>
+        </div> --}}
     </div>
 
 

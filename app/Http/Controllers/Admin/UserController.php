@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use App\Like;
 use App\Post;
+use App\Comment;
+use App\Bookmark;
 use Auth;
 
 class UserController extends Controller
@@ -39,11 +42,17 @@ class UserController extends Controller
     }
 
     public function getactivity($id){
-        $users = User::find($id);
-        $postLike = Post::withCount(['like' => function($query) use ($id){
-            $query->orWhere('likes.user_id', $id);
-        }])->get();
-        dd($postLike);
-        return view('admin.user.activity');
+        $users                  = User::find($id);
+        $Bookmark               = Bookmark::get();
+        $data['post_like']      = Like::where('user_id', $id)->leftJoin('posts', 'posts.id','=','likes.post_id')->select('likes.id as like_id', 'posts.*')->get();
+        $data['post_comment']   = Comment::where('user_id', $id)->leftJoin('posts', 'posts.id','=','comments.post_id')->select('comments.id as comment_id', 'posts.*')->get();
+        $data['post_bookmark']  = Bookmark::where('user_id', $id)->leftJoin('posts', 'posts.id','=','bookmarks.post_id')->select('bookmarks.id as book_id', 'posts.*')->get();
+        // dd($data);
+        // dd($Bookmark);
+        return view('admin.user.activity', $data);
+    }
+
+    public function setting(){
+        return view('admin.user.setting');
     }
 }

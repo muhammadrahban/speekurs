@@ -90,8 +90,7 @@ class PostController extends Controller
         return redirect()->route('post.index');
     }
 
-
-        // \File::put(storage_path(). '/' . $imageName, base64_decode($image));
+    // \File::put(storage_path(). '/' . $imageName, base64_decode($image));
 
     /**
      * Display the specified resource.
@@ -113,7 +112,13 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = [
+            'Isposts'       => 1,
+            'categories'    => Category::get(),
+            'post'         => Post::find($id),
+        ];
+        // dd($data['post']);
+        return view('admin.post.create', $data);
     }
 
     /**
@@ -125,7 +130,43 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $validator = $request->validate([
+            'title'         => 'required|max:180',
+            'category_id'   => 'required',
+            'sub_title'     => 'required|max:180',
+            'description'   => 'required|max:600',
+        ]);
+        $post = Post::find($id);
+       if ($input['imageUpload'] || $input['imageUpload'] != NULL) {
+            $folderPath = public_path('postimage/');
+            $image_parts = explode(";base64,", $input['imageUpload']);
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image_base64 = base64_decode($image_parts[1]);
+            $filename = time() . '.'. $image_type;
+            $file =$folderPath.$filename;
+            file_put_contents($file, $image_base64);
+            $post->image = 'postimage/' .$filename;
+
+        }else if($input['videoUpload']){
+            $post->image = $input['videoUpload'];
+        }
+        if ($request->post('date') == null) {
+            $post->date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date);
+        }
+        if ($request->post('featured') == "on") {
+            $post->featured = 1;
+        }else{
+            $post->featured = 0;
+        }
+        $post->title            =   $request->title;
+        $post->category_id      =   $request->category_id;
+        $post->sub_title        =   $request->sub_title;
+        $post->description      =   $request->description;
+        $post->save();
+        // $post = Post::update($input);
+        return redirect()->route('post.index')->with('success', 'Post Updated!');
     }
 
     /**
@@ -136,6 +177,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        $post->delete();
+        return redirect()->route('post.index')->with('success', 'Post deleted!');
     }
 }
