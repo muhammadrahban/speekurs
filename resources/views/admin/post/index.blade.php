@@ -1,5 +1,4 @@
 @extends('admin.layouts.app')
-
 @section('content')
 <div class="container">
 
@@ -14,53 +13,38 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h2 class="h3 mb-0 text-gray-800">Posts List</h2>
         <a href="{{ route('post.create') }}"><button class="btn btn-warning btn-sm">Add Post</button></a>
-
     </div>
-	<div class="row">
-        <div class="col-md-12">
-        <div class="table-responsive">
-            <table id="mytable" class="table table-bordred table-striped">
-                <thead>
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>title</th>
-                    <th>sub title</th>
-                    <th>Date</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </thead>
-                <tbody>
-                    @foreach ($posts as $post)
-                        <tr>
-                            <td>{{ $post->id }}
-                                <i class=" {{ ($post->featured == '1') ? 'fa fa-star text-primary' : '' }} "></i>
-                            </td>
-                            <td>
-                            @if (strpos($post->image, 'postimage') !== false)
-                                <img src="{{asset($post->image)}}" alt="{{ $post->image }}" height="70" class="img-fluid rounded">
-                            @else
-                                <img src="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg" alt="{{ $post->image }}" height="70" class="img-fluid rounded">
-                            @endif
-                             
-                            </td>
-                            <td><a href="{{ route('post.show', $post->id) }}">{{ $post->title }}</a></td>
-                            <td>{{ $post->sub_title }}</td>
-                            <td>{{ $post->created_at->diffForHumans() }}</td>
-                            <td><a href="{{ route('post.edit', $post->id)}}" title="Edit"><button class="btn btn-primary btn-sm">EDIT</button></a></td>
+    @foreach ($posts as $post)
+    <div class="card border-0 shadow-lg mb-3">
+        <div class="row no-gutters">
+            <div class="col-md-3 position-ralative" style=" min-height:150px;">
+                @if (strpos($post->image, 'postimage') !== false)
+                    <img src="{{asset($post->image)}}" alt="{{ $post->image }}" class="card-img h-100 position-absolute" style="object-fit:cover;">
+                @else
+                    <img src="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg" alt="{{ $post->image }}" class="card-img h-100 position-absolute" style="object-fit:cover;">
+                @endif
+            </div>
+            <div class="col-md-9">
+                <div class="card-body">
+                    <h5 class="card-title mb-2 font-weight-bold text-dark">{{ ucfirst($post->title) }}</h5>
+                    <p class="card-text mb-2">{{ ucfirst($post->sub_title) }}</p>
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <span>
+                            Last Modify {{ $post->updated_at->diffForHumans() }}
+                        </span>
+                        <div class="d-flex">
                             <form action="{{ route('post.destroy', $post->id)}}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <td>
-                                    <button class="btn btn-danger btn-sm" type="submit">DELETE</button>
-                                </td>
+                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                             </form>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                            <a href="{{ route('post.edit', $post->id)}}" class="btn btn-primary btn-sm ml-2">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-	</div>
+    </div>
+    @endforeach
 </div>
-
-
 @endsection

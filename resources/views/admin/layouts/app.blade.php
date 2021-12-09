@@ -26,6 +26,9 @@
         .ck-editor__editable {
             min-height: 300px !important;
         }
+        .avatar{
+            border-radius:50%;
+        }
     </style>
 
 </head>
@@ -36,14 +39,16 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
+                <div class="sidebar-brand-icon">
                     <img src="{{ asset('image/Speekur_Logo_mobile.png') }}" width="30" height="30" />
                 </div>
-                <div class="sidebar-brand-text mx-3">Speekur</div>
+                <div class="sidebar-brand-text mx-3">
+                    <img src="{{ asset('image/speekur_logo_text.png') }}" height="20" />    
+                </div>
             </a>
 
             <!-- Divider -->
@@ -115,9 +120,6 @@
                     </div>
                 </div>
             </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -216,34 +218,36 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src={{ asset('assets/admin/vendor/jquery/jquery.min.js') }}></script>
-    <script src={{ asset('assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}></script>
+    <script src="{{ asset('assets/admin/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src={{ asset('assets/admin/vendor/jquery-easing/jquery.easing.min.js') }}></script>
+    <script src="{{ asset('assets/admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src={{ asset('assets/admin/js/sb-admin-2.min.js') }}></script>
+    <script src="{{ asset('assets/admin/js/sb-admin-2.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src={{ asset('assets/admin/vendor/chart/Chart.min.js') }}></script>
+    <!-- <script src="{{ asset('assets/admin/vendor/chart/Chart.min.js') }}"></script> -->
 
     <!-- Page level custom scripts -->
-    <script src={{ asset('assets/admin/js/demo/chart-area-demo.js') }}></script>
-    <script src={{ asset('assets/admin/js/demo/chart-pie-demo.js') }}></script>
+    <!-- <script src="{{ asset('assets/admin/js/demo/chart-area-demo.js') }}"></script> -->
+    <!-- <script src="{{ asset('assets/admin/js/demo/chart-pie-demo.js') }}"></script> -->
 
     <script>
-        ClassicEditor
+        if($('#editor').length==1){
+            ClassicEditor
                 .create( document.querySelector( '#editor' ) )
                 .then( editor => {
                         // console.log( editor );
                 } )
                 .catch( error => {
                         console.error( error );
-                } );
+                });
             CKEDITOR.replace( '#editor', {
                 height: 700
             });
+        }
     </script>
 
 </body>
