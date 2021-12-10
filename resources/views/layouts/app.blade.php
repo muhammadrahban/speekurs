@@ -398,26 +398,26 @@
     <script src="{{ asset('assets/front/js/main.js ')}}"></script>
 
      <script type='text/javascript'>
-
-       var height=0;
-       height=document.querySelectorAll('.header-top')[0].clientHeight;
-       if(height==0){
-            height=document.querySelectorAll('.mobile-header-wrapper')[0].clientHeight;
-       }
-       $('#search_result').css('top',height+'px');
-       if($('.nav-bottom').length>0){
-            $('.nav-bottom').css('margin-top',height+'px');
-            height+=document.querySelectorAll('.nav-bottom')[0].clientHeight;
-       }
-       $('header').first().css({
-           'height':height+'px',
-           'width':'100%',
-           'position':'fixed',
-           'z-index':'1000'
+         $(document).ready(function(){
+            var height=0;
+            height=document.querySelectorAll('.header-top')[0].clientHeight;
+            if(height==0){
+                    height=document.querySelectorAll('.mobile-header-wrapper')[0].clientHeight;
+            }
+            $('#search_result').css('top',height+'px');
+            if($('.nav-bottom').length>0){
+                    $('.nav-bottom').css('margin-top',height+'px');
+                    height+=document.querySelectorAll('.nav-bottom')[0].clientHeight;
+            }
+            $('header').first().css({
+                'height':height+'px',
+                'width':'100%',
+                'position':'fixed',
+                'z-index':'1000'
+                });
+            $('.main-wrapper').parent().css('padding-top',height+'px');
+            $('.side-bar-sticky').css('top',height+'px');
         });
-       $('.main-wrapper').parent().css('padding-top',height+'px');
-       $('.side-bar-sticky').css('top',height+'px');
-
 
         $('#sortType').on('change',function(){
             fetchRecords();
@@ -498,7 +498,7 @@
                     if(len > 0){
                         for(var i=0; i<len; i++){
 
-                            if(response['data'][i].isliked){
+                            if(response['data'][i].isliked!=null &&response['data'][i].isliked.length>0){
                                 var like_img='fa fa-2x fa-heart text-primary';
                             }else{
                                 var like_img='far fa-2x fa-heart';
@@ -565,7 +565,7 @@
                                         var response=data[1].split(":")[0];
                                         var count=data[1].split(":")[1];
                                         if(response=='liked'){
-                                            $(obj).attr('class', 'chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart');
+                                            $(obj).attr('class', 'chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart text-primary');
                                             $('#count_'+postid).text(count);
                                         }else if(response=='dislike'){
                                             $(obj).attr('class', 'chosenHeartIcon align-middle mr-2 far fa-2x fa-heart');

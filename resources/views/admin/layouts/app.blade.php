@@ -29,6 +29,22 @@
         .avatar{
             border-radius:50%;
         }
+        .btn-primary {
+            color: #fff !important;
+            background-color: #ff9800;
+            border-color: #ed8e01;
+        }
+        .btn-primary:hover {
+            color: #fff !important;
+            background-color: #e18907;
+            border-color: #e18907;
+        }
+        .is-invalid{
+        border:1px solid #dc3545;
+        }
+        .is-invalid .invalid-feedback{
+        display: block;
+        }
     </style>
 
 </head>
@@ -42,7 +58,7 @@
         <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL('/') }}">
                 <div class="sidebar-brand-icon">
                     <img src="{{ asset('image/Speekur_Logo_mobile.png') }}" width="30" height="30" />
                 </div>
@@ -154,7 +170,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="{{route('admin.user.setting')}}">
+                                <a class="dropdown-item" href="{{route('admin.setting')}}">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>

@@ -56,9 +56,10 @@ class WelcomeController extends Controller
 
     public function getbookmark(){
         if (!Auth::check()) {
+            return redirect()->route('login');
         }else{
             $user_id = Auth::user()->id;
-            $bookmark   = Post::join('bookmarks', 'bookmarks.post_id', '=', 'posts.id')->where('bookmarks.user_id', $user_id)->get();
+            $bookmark   = Post::join('bookmarks', 'bookmarks.post_id', '=', 'posts.id')->where('bookmarks.user_id', $user_id)->with('isliked')->withCount('like as like')->withCount('comment as comments')->get();
         }
         $data['bookmark'] = $bookmark;
         return view('bookmark', $data);
@@ -66,6 +67,7 @@ class WelcomeController extends Controller
 
     public function removebookmark(Request $request){
         if (!Auth::check()) {
+            return redirect()->route('login');
         }else{
             $user_id    = Auth::user()->id;
             $post_id    = $request->post('post_id');
@@ -129,7 +131,7 @@ class WelcomeController extends Controller
         if (!Auth::check()) {
             $data = Post::where('id', $id)->with('like')->get();
         }else{
-            $data = Post::where('id', $id)->with('like', 'isliked', 'bookmark')->get();
+            $data = Post::where('id', $id)->with('isliked')->withCount('bookmark as bookmark')->withCount('like as like')->withCount('comment as comments')->get();
         }
         $Posts['data'] = $data;
         return view('singlepost', $Posts);

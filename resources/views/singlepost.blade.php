@@ -22,24 +22,24 @@
                                 @guest
                                 <a class="post-icons mr-3">
                                     <i class="chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart" data-post-id="{{$post->id}}" aria-hidden="true"></i>
-                                    <span id="count_{{$post->id}}">{{$post->like->count()}}</span>
+                                    <span id="count_{{$post->id}}">{{$post->like}}</span>
                                 </a>
                                 @else
                                     @if ($post->isliked->count() > 0)
                                     <a class="post-icons mr-3">
                                         <i class="chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart text-primary" data-post-id="{{$post->id}}" aria-hidden="true"></i>
-                                        <span id="count_{{$post->id}}">{{$post->like->count()}}</span>
+                                        <span id="count_{{$post->id}}">{{$post->like}}</span>
                                     </a>
                                     @else
                                     <a class="post-icons mr-3">
-                                        <i class="chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart" data-post-id="{{$post->id}}" aria-hidden="true"></i>
-                                        <span id="count_{{$post->id}}">{{$post->like->count()}}</span>
+                                        <i class="chosenHeartIcon align-middle mr-2 far fa-2x fa-heart" data-post-id="{{$post->id}}" aria-hidden="true"></i>
+                                        <span id="count_{{$post->id}}">{{$post->like}}</span>
                                     </a>
                                     @endif
                                 @endguest
                                 <a class="post-icons mr-3"><i class="align-middle mr-2 far fa-2x fa-comments" aria-hidden="true"></i><span>{{$post->comment->count()}}</span></a>
 
-                                @if ($post->bookmark->count() > 0)
+                                @if ($post->bookmark)
                                     <a class="post-icons mr-3"><i class="chosenBookmarkIcon align-middle far fa-2x fa-bookmark text-primary" data-post-id="{{$post->id}}" aria-hidden="true"></i></a>
                                 @else
                                     <a class="post-icons mr-3"><i class="chosenBookmarkIcon align-middle far fa-2x fa-bookmark" data-post-id="{{$post->id}}" aria-hidden="true"></i></a>

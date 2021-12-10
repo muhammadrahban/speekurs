@@ -44,11 +44,11 @@ class UserController extends Controller
     public function getactivity($id){
         $users                  = User::find($id);
         $Bookmark               = Bookmark::get();
-        $data['post_like']      = Like::where('user_id', $id)->leftJoin('posts', 'posts.id','=','likes.post_id')->select('likes.id as like_id', 'posts.*')->get();
-        $data['post_comment']   = Comment::where('user_id', $id)->leftJoin('posts', 'posts.id','=','comments.post_id')->select('comments.id as comment_id', 'posts.*')->get();
-        $data['post_bookmark']  = Bookmark::where('user_id', $id)->leftJoin('posts', 'posts.id','=','bookmarks.post_id')->select('bookmarks.id as book_id', 'posts.*')->get();
-        // dd($data);
-        // dd($Bookmark);
+        $data['post_like']      = Like::where('user_id', $id)->leftJoin('posts', 'posts.id','=','likes.post_id')->select('likes.id as like_id', 'posts.*')->orderby('likes.created_at','desc')->get();
+        $data['post_comment']   = Comment::where('user_id', $id)->leftJoin('posts', 'posts.id','=','comments.post_id')->select('comments.id as comment_id','comments.comment as comment','comments.parent_comment_id as `parent`', 'posts.*')->orderby('comments.created_at','desc')->get();
+        $data['post_bookmark']  = Bookmark::where('user_id', $id)->leftJoin('posts', 'posts.id','=','bookmarks.post_id')->select('bookmarks.id as book_id', 'posts.*')->orderby('bookmarks.created_at','desc')->get();
+        //dd($data['post_comment']);
+        
         return view('admin.user.activity', $data);
     }
 

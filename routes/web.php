@@ -59,7 +59,8 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
     Route::resource('/page', AdminPageController::class);
 
     Route::get('/users', 'UserController@index')->name('admin.user.index');
-    Route::get('/setting', 'UserController@setting')->name('admin.user.setting');
+    Route::get('/setting', 'UserController@setting')->name('admin.setting');
+    Route::post('/setting', 'UserController@setting')->name('admin.update.setting');
     Route::get('/edit/{id}', 'UserController@edit')->name('admin.user.edit');
     Route::patch('/update/{id}', 'UserController@update')->name('admin.user.update');
     Route::get('/users/activity/{id}', 'UserController@getactivity')->name('admin.user.activity');
