@@ -58,12 +58,12 @@ class UserController extends Controller
         $users                  = User::find($id);
         $Bookmark               = Bookmark::get();
 
-        $data['post_like']      = Like::where('user_id', $id)->leftJoin('posts', 'posts.id','=','likes.post_id')->select('likes.id as like_id','likes.post_id as isPost','likes.comment_id as isComment', 'posts.*')->orderby('likes.created_at','desc')->get();
+        $data['post_like']      = Like::where('likes.user_id', $id)->leftJoin('posts', 'posts.id','=','likes.post_id')->leftJoin('comments', 'comments.id','=','likes.comment_id')->select('likes.id as like_id','likes.post_id as isPost','comments.comment as isComment', 'posts.*')->orderby('likes.created_at','desc')->get();
 
         $data['post_comment']   = Comment::where('user_id', $id)->leftJoin('posts', 'posts.id','=','comments.post_id')->select('comments.id as comment_id','comments.comment as comment','comments.parent_comment_id as `parent`', 'posts.*')->orderby('comments.created_at','desc')->get();
 
         $data['post_bookmark']  = Bookmark::where('user_id', $id)->leftJoin('posts', 'posts.id','=','bookmarks.post_id')->select('bookmarks.id as book_id', 'posts.*')->orderby('bookmarks.created_at','desc')->get();
-        dd($data['post_like']);
+        // dd($data['post_like']);
 
         return view('admin.user.activity', $data);
     }
@@ -79,11 +79,8 @@ class UserController extends Controller
             'current_password'      => 'required',
             'password'              => 'required|min:6',
         ]);
-
         $user->name         =   $request->name;
         $user->email        =   $request->email;
-
-
         if (Hash::check($request->post('current_password'), $user->password)) {
             $user->password     =   Hash::make($request->password);
             $user->save();
@@ -93,6 +90,23 @@ class UserController extends Controller
             return redirect('/admin')->with('error', 'Password Not Match!');
         }
 
-        // return view('admin.user.setting');
+    }
+
+    public function deleteActivity(Request $request){
+        // dd($request->all());
+        if ($request->likeId) {
+            $like   = Like::find($request->likeId);
+            $like->delete();
+            return redirect()->back()->with('success', 'Like deleted!');
+        }else if ($request->commentId) {
+            $commentId   = Comment::find($request->commentId);
+            $commentId->delete();
+            return redirect()->back()->with('success', 'Comment deleted!');
+        }else if ($request->bookId) {
+            $bookId   = Bookmark::find($request->bookId);
+            $bookId->delete();
+            return redirect()->back()->with('success', 'Bookmark deleted!');
+        }
+
     }
 }

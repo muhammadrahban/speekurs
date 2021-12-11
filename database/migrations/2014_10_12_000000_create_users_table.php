@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('image')->default('user.png');
+            $table->string('image')->default('profileimage/user.png');
             $table->string('status');
             $table->string('dob')->default('0000-00-00');
             $table->string('country')->default('pakistan');

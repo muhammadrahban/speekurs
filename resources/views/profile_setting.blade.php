@@ -15,7 +15,7 @@
                 <div class="row align-items-center mb-4">
                     <div id="removeImage" class="col-4 text-center text-md-left font-weight-bold text-primary">Remove Photo</div>
                     <div class="col-4 text-center">
-                        <img id="avatar" height="70" src="{{URL('/')}}/image/{{Auth::user()->image}}">
+                        <img id="avatar" height="70" src="{{URL('/')}}/{{Auth::user()->image}}">
                         <input type="hidden" name="image">
                     </div>
                     <button type="button" onclick="$(this).next('input').click();" class="col-4 text-center text-md-right font-weight-bold text-primary btn btn-transparent">Change Photo</button>
@@ -340,9 +340,9 @@
                 $(this).attr('selected',true);
             }
         });
-    
+
         $('#removeImage').on('click',function(){
-            $('#avatar').attr('src','{{URL('/')}}/image/user.png');
+            $('#avatar').attr('src','{{URL('/')}}/profileimage/user.png');
             $('input[name="image"]').val('default');
         });
         $('#changeImage').on('change',function(e){

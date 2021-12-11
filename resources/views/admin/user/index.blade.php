@@ -16,7 +16,7 @@
         <div class="col-lg-3 col-md-4 col-sm-6 p-0">
             <div class="card shadow-lg border-0 text-center">
                 <div class="p-3">
-                    <img class="avatar shadow-sm mx-auto mb-4" src="{{ URL('/').'/image/'.$user->image}}" width="70" height="70" />
+                    <img class="avatar shadow-sm mx-auto mb-4" src="{{ URL('/').'/'.$user->image}}" width="70" height="70" />
                     <h5 class="font-weight-bold mb-0 text-dark">{{ ucwords($user->name) }}</h5>
                     <small class="d-block">{{ $user->email }}</small>
                     <hr class="my-2">

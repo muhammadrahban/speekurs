@@ -112,8 +112,9 @@ class WelcomeController extends Controller
             return response()->json(['response','dislike:'. $count]);
         }else{
             Like::create([
-                'user_id'   => $user_id,
-                'comment_id'   => $request->post('comment_id')
+                'user_id'       => $user_id,
+                'post_id'       => $request->post('post_id'),
+                'comment_id'    => $request->post('comment_id')
             ]);
             $count = Like::where(['comment_id' => $request->post('comment_id') ])->get()->count();
             return response()->json(['response','liked:'. $count]);
@@ -179,8 +180,11 @@ class WelcomeController extends Controller
         return 'success';
     }
 
-    public function getComments(Request $request){
-        $comments  = Comment::with('users', 'isliked')->where('post_id', $request->post('postid'))->withCount('likeComment as likecomment')->orderBy('mark')->get();
+    public function getComments($id){
+        $post_id    = (int)$id;
+        $comments  = Comment::with(['users' => function($query){
+            $query->where('status', 1);
+        } ])->with('isliked')->where('post_id', $post_id)->withCount('likeComment as likecomment')->orderBy('mark')->get();
         return response()->json($comments);
     }
 

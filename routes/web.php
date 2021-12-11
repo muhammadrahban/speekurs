@@ -31,7 +31,7 @@ Route::post('/setCommentLike', 'WelcomeController@setCommentLike');
 Route::get('/search/{char}', 'WelcomeController@search');
 Route::post('/sebookmark', 'WelcomeController@sebookmark');
 Route::post('/setComment', 'WelcomeController@setComment');
-Route::post('/getComments', 'WelcomeController@getComments');
+Route::get('/getComments/{id}', 'WelcomeController@getComments');
 
 Route::view('/primary_policy', 'primary_policy');
 
@@ -66,6 +66,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
     Route::get('/edit/{id}', 'UserController@edit')->name('admin.user.edit');
     Route::patch('/update/{id}', 'UserController@update')->name('admin.user.update');
     Route::get('/users/activity/{id}', 'UserController@getactivity')->name('admin.user.activity');
+    Route::post('/users/deleteActivity', 'UserController@deleteActivity')->name('admin.user.activity.delete');
 });
 
 Route::get('login/{provider}', 'SocialController@redirect');

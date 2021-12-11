@@ -21,9 +21,27 @@ class ProfileController extends Controller
     }
 
     public function setprofile(Request $request){
-
+        // dd($request->all());
         $user_id    = \Auth::user()->id;
         $user       = User::find($user_id);
+
+        if ($request->image || $request->image != NULL) {
+            $find_img   =   strpos($request->image, ";base64,");
+            if ($find_img === false) {
+                $user->image    = 'profileimage/user.png';
+            }else{
+                $folderPath = public_path('profileimage/');
+                $image_parts = explode(";base64,", $request->image);
+                $image_type_aux = explode("image/", $image_parts[0]);
+                $image_type = $image_type_aux[1];
+                $image_base64 = base64_decode($image_parts[1]);
+                $filename = time() . '.'. $image_type;
+                $file =$folderPath.$filename;
+                file_put_contents($file, $image_base64);
+                $user->image = 'profileimage/' .$filename;
+            }
+        }
+
         if (Hash::check($request->post('current_password'), $user->password)) {
             $user->name     =  $request->post('name');
             $user->dob      =  $request->post('dob');

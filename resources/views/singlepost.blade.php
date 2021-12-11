@@ -59,9 +59,9 @@
                             @else
                             <div class="input-group mt-4">
                                 <div class="input-group-prepend">
-                                    <img class="mr-2" height="40" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
+                                    <img class="mr-2" height="40" src="{{URL('/')}}/{{Auth::user()->image}}" alt="profile picture">
                                 </div>
-                                <input type="text" class="form-control border-light" data-postid="1" id="comment_input" placeholder="Write a comment...">
+                                <input type="text" class="form-control border-light" data-postid="{{$post->id}}" id="comment_input" placeholder="Write a comment...">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary border-light" id="submitComment" type="submit">send</button>
                                 </div>
@@ -75,6 +75,7 @@
                     <!-- post status end -->
                 </div>
 <script>
+
 window.onload=function(){
     $('#submitComment').on('click',function(){
         var message=$('#comment_input').val();
@@ -98,27 +99,21 @@ window.onload=function(){
             })
         }
     });
+    function  getComments(postid){
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                type:"get",
+                url:"{{URL('/')}}/getComments/"+Number(postid),
+                success: function(data){
+                    console.log(data);
+                    var build='';
 
-    function getComments(postid){
-        $.ajax({
-            type:"post",
-            url:"{{URL('/')}}/getComments",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                'postid':postid
-            },
-            beforeSend:function(){
-                $('#comment_tree').html('<i class="fa fa-circle-notch fa-spin"></i>');
-            },
-            success: function(data){
-                var build='';
-                console.log(data);
-                var currentParent="";
-                for(var i=0;i<data.length;i++){
-                    if(data[i]['parent_comment_id']==0){
+                    var currentParent="";
+                    for(var i=0;i<data.length;i++){
+                        if(data[i]['parent_comment_id']==0){
 
-                        if(currentParent!=data[i]['parent_comment_id']){
-                            currentParent=data[i]['parent_comment_id'];
+                            if(currentParent!=data[i]['parent_comment_id']){
+                                currentParent=data[i]['parent_comment_id'];
                                 var icon='far fa-heart';
                                 if(data[i].isliked!=null){
                                     icon='fa fa-heart text-primary';
@@ -126,7 +121,7 @@ window.onload=function(){
                                 build+='<div class="row mx-0 comment-parent">'+
                                         '<div class="comment-line"></div>'+
                                         '<div class="col-1 p-0">'+
-                                            '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
+                                            '<img height="30" class="avatar" src="{{URL('/')}}/'+data[i]['users'][0]['image']+'">'+
 
                                         '</div>'+
                                         '<div class="col-11 mb-3">'+
@@ -135,121 +130,277 @@ window.onload=function(){
                                             '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
                                         '</div>';
 
-                        }else{
-                            @guest
-                            @else
-                                if(i>0){
-                                    build+='<div class="col-12 mx-0 row ml-4">'+
-                                                '<div class="input-group w-100">'+
-                                                    '<div class="input-group-prepend">'+
-                                                        '<img class="mr-2" height="30" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">'+
+                            }else{
+                                @guest
+                                @else
+                                    if(i>0){
+                                        build+='<div class="col-12 mx-0 row ml-4">'+
+                                                    '<div class="input-group w-100">'+
+                                                        '<div class="input-group-prepend">'+
+                                                            '<img class="mr-2" height="30" src="{{URL('/')}}/{{Auth::user()->image}}" alt="profile picture">'+
+                                                        '</div>'+
+                                                        '<input type="text" class="form-control border-light" id="comment_reply_'+data[i]['id']+'" placeholder="Write a comment...">'+
+                                                        '<div class="input-group-append">'+
+                                                            '<button class="btn btn-outline-secondary border-light" type="button" data-parent="'+data[i]['id']+'" data-relay-to="'+data[i]['post_id']+'">send</button>'+
+                                                        '</div>'+
                                                     '</div>'+
-                                                    '<input type="text" class="form-control border-light" id="comment_reply_'+data[i]['id']+'" placeholder="Write a comment...">'+
-                                                    '<div class="input-group-append">'+
-                                                        '<button class="btn btn-outline-secondary border-light" type="button" data-parent="'+data[i]['id']+'" data-relay-to="'+data[i]['post_id']+'">send</button>'+
-                                                    '</div>'+
-                                                '</div>'+
-                                            '</div></div>';
-                                }
-                                var icon='far fa-heart';
-                                if(data[i].isliked!=null){
-                                    icon='fa fa-heart text-primary';
-                                }
-                                build+='<div class="row mx-0 comment-parent">'+
-                                    '<div class="comment-line"></div>'+
-                                    '<div class="col-1 p-0">'+
-                                        '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
-
-                                    '</div>'+
-                                    '<div class="col-11 mb-3">'+
-                                        '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
-                                        '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                        '<div class="text-muted "><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
-                                    '</div>';
-                            @endguest
-                        }
-
-                    }else{
-                        var icon='far fa-heart';
-                        if(data[i].isliked!=null){
-                            icon='fa fa-heart text-primary';
-                        }
-                        build+='<div class="child col-12 row mx-0 ml-4">'+
-                                    '<div class="col-1 p-0">'+
-                                        '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
+                                                '</div></div>';
+                                    }
+                                    var icon='far fa-heart';
+                                    if(data[i].isliked!=null){
+                                        icon='fa fa-heart text-primary';
+                                    }
+                                    build+='<div class="row mx-0 comment-parent">'+
                                         '<div class="comment-line"></div>'+
-                                    '</div>'+
-                                    '<div class="col-11">'+
-                                        '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
-                                        '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                        '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a></div>'+
-                                    '</div>'+
-                                '</div>';
+                                        '<div class="col-1 p-0">'+
+                                            '<img height="30" class="avatar" src="{{URL('/')}}/'+data[i]['users'][0]['image']+'">'+
+
+                                        '</div>'+
+                                        '<div class="col-11 mb-3">'+
+                                            '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
+                                            '<p class="mb-0">'+data[i]['comment']+'</p>'+
+                                            '<div class="text-muted "><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
+                                        '</div>';
+                                @endguest
+                            }
+
+                        }else{
+                            var icon='far fa-heart';
+                            if(data[i].isliked!=null){
+                                icon='fa fa-heart text-primary';
+                            }
+                            build+='<div class="child col-12 row mx-0 ml-4">'+
+                                '<div class="col-1 p-0">'+
+                                    '<img height="30" class="avatar" src="{{URL('/')}}/'+data[i]['users'][0]['image']+'">'+
+                                    '<div class="comment-line"></div>'+
+                                '</div>'+
+                                '<div class="col-11">'+
+                                    '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
+                                    '<p class="mb-0">'+data[i]['comment']+'</p>'+
+                                    '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a></div>'+
+                                '</div>'+
+                            '</div>';
+                        }
                     }
+                    $('#comment_tree').html(build);
+                    //Comment Likes
+                    $('a[data-comment-id]').on('click', function(e) {
+
+                        e.preventDefault();
+                        var obj=$(this);
+                        @guest
+                            window.location.href = "{{route('login')}}";
+                        @else
+                            var commentid=$(obj).attr('data-comment-id');
+                            $.ajax({
+                                url: "{{URL('/')}}/setCommentLike",
+                                type: 'post',
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    'comment_id':commentid,
+                                    'post_id':'{{ $post->id }}'
+                                },
+                                success: function(data){
+
+                                    var response=data[1].split(":")[0];
+                                    var count=data[1].split(":")[1];
+                                    if(response=='liked'){
+                                        $(obj).find('i').attr('class', 'align-middle mr-2 fa fa-heart text-primary');
+                                        $('#comment_count_'+commentid).text(count);
+                                    }else if(response=='dislike'){
+                                        $(obj).find('i').attr('class', 'align-middle mr-2 far fa-heart');
+                                        $('#comment_count_'+commentid).text(count);
+                                    }
+                                }
+
+                            });
+                        @endguest
+                    });
+
+                    $('*[data-relay-to]').on('click',function(){
+                        var postid=$(this).attr('data-relay-to');
+                        var parentcomment=$(this).attr('data-parent');
+                        var message=$('#comment_reply_'+parentcomment).val();
+                        if(message.trim()!=""){
+                            $.ajax({
+                                type:"post",
+                                url:'{{URL('/')}}/setComment',
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    'postid':postid,
+                                    'comment':message,
+                                    'p_comment':parentcomment
+                                },
+                                success: function(data){
+                                    $('#comment_reply_'+parentcomment).val("");
+                                    if(data=='success'){
+                                        getComments(postid);
+                                    }
+                                }
+                            })
+                        }
+                    });
+                },
+                error: function(err) {
+                    reject(err) // Reject the promise and go to catch()
                 }
-                $('#comment_tree').html(build);
-                //Comment Likes
-                $('a[data-comment-id]').on('click', function(e) {
-
-                    e.preventDefault();
-                    var obj=$(this);
-                    @guest
-                        window.location.href = "{{route('login')}}";
-                    @else
-                        var commentid=$(obj).attr('data-comment-id');
-                        $.ajax({
-                            url: "{{URL('/')}}/setCommentLike",
-                            type: 'post',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'comment_id':commentid
-                            },
-                            success: function(data){
-
-                                var response=data[1].split(":")[0];
-                                var count=data[1].split(":")[1];
-                                if(response=='liked'){
-                                    $(obj).find('i').attr('class', 'align-middle mr-2 fa fa-heart text-primary');
-                                    $('#comment_count_'+commentid).text(count);
-                                }else if(response=='dislike'){
-                                    $(obj).find('i').attr('class', 'align-middle mr-2 far fa-heart');
-                                    $('#comment_count_'+commentid).text(count);
-                                }
-                            }
-
-                        });
-                    @endguest
-                });
-
-                $('*[data-relay-to]').on('click',function(){
-                    var postid=$(this).attr('data-relay-to');
-                    var parentcomment=$(this).attr('data-parent');
-                    var message=$('#comment_reply_'+parentcomment).val();
-                    if(message.trim()!=""){
-                        $.ajax({
-                            type:"post",
-                            url:'{{URL('/')}}/setComment',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'postid':postid,
-                                'comment':message,
-                                'p_comment':parentcomment
-                            },
-                            success: function(data){
-                                $('#comment_reply_'+parentcomment).val("");
-                                if(data=='success'){
-                                    getComments(postid);
-                                }
-                            }
-                        })
-                    }
-                });
-            }
-        })
+            });
+        });
     }
-    setTimeout(function(){
-        getComments({{$post->id}});
-    },1000);
+
+    // function getComments(postid){
+    //     $.ajax({
+    //         type:"post",
+    //         url:"{{URL('/')}}/getComments",
+    //         data: {
+    //             "_token": "{{ csrf_token() }}",
+    //             'postid':postid
+    //         },
+    //         beforeSend:function(){
+    //             $('#comment_tree').html('<i class="fa fa-circle-notch fa-spin"></i>');
+    //         },
+    //         success: function(data){
+    //             var build='';
+    //             console.log(data);
+    //             var currentParent="";
+    //             for(var i=0;i<data.length;i++){
+    //                 if(data[i]['parent_comment_id']==0){
+
+    //                     if(currentParent!=data[i]['parent_comment_id']){
+    //                         currentParent=data[i]['parent_comment_id'];
+    //                             var icon='far fa-heart';
+    //                             if(data[i].isliked!=null){
+    //                                 icon='fa fa-heart text-primary';
+    //                             }
+    //                             build+='<div class="row mx-0 comment-parent">'+
+    //                                     '<div class="comment-line"></div>'+
+    //                                     '<div class="col-1 p-0">'+
+    //                                         '<img height="30" class="avatar" src="{{URL('/')}}/'+data[i]['users'][0]['image']+'">'+
+
+    //                                     '</div>'+
+    //                                     '<div class="col-11 mb-3">'+
+    //                                         '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
+    //                                         '<p class="mb-0">'+data[i]['comment']+'</p>'+
+    //                                         '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
+    //                                     '</div>';
+
+    //                     }else{
+    //                         @guest
+    //                         @else
+    //                             if(i>0){
+    //                                 build+='<div class="col-12 mx-0 row ml-4">'+
+    //                                             '<div class="input-group w-100">'+
+    //                                                 '<div class="input-group-prepend">'+
+    //                                                     '<img class="mr-2" height="30" src="{{URL('/')}}/{{Auth::user()->image}}" alt="profile picture">'+
+    //                                                 '</div>'+
+    //                                                 '<input type="text" class="form-control border-light" id="comment_reply_'+data[i]['id']+'" placeholder="Write a comment...">'+
+    //                                                 '<div class="input-group-append">'+
+    //                                                     '<button class="btn btn-outline-secondary border-light" type="button" data-parent="'+data[i]['id']+'" data-relay-to="'+data[i]['post_id']+'">send</button>'+
+    //                                                 '</div>'+
+    //                                             '</div>'+
+    //                                         '</div></div>';
+    //                             }
+    //                             var icon='far fa-heart';
+    //                             if(data[i].isliked!=null){
+    //                                 icon='fa fa-heart text-primary';
+    //                             }
+    //                             build+='<div class="row mx-0 comment-parent">'+
+    //                                 '<div class="comment-line"></div>'+
+    //                                 '<div class="col-1 p-0">'+
+    //                                     '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
+
+    //                                 '</div>'+
+    //                                 '<div class="col-11 mb-3">'+
+    //                                     '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
+    //                                     '<p class="mb-0">'+data[i]['comment']+'</p>'+
+    //                                     '<div class="text-muted "><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
+    //                                 '</div>';
+    //                         @endguest
+    //                     }
+
+    //                 }else{
+    //                     var icon='far fa-heart';
+    //                     if(data[i].isliked!=null){
+    //                         icon='fa fa-heart text-primary';
+    //                     }
+    //                     build+='<div class="child col-12 row mx-0 ml-4">'+
+    //                                 '<div class="col-1 p-0">'+
+    //                                     '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
+    //                                     '<div class="comment-line"></div>'+
+    //                                 '</div>'+
+    //                                 '<div class="col-11">'+
+    //                                     '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
+    //                                     '<p class="mb-0">'+data[i]['comment']+'</p>'+
+    //                                     '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a></div>'+
+    //                                 '</div>'+
+    //                             '</div>';
+    //                 }
+    //             }
+    //             $('#comment_tree').html(build);
+    //             //Comment Likes
+    //             $('a[data-comment-id]').on('click', function(e) {
+
+    //                 e.preventDefault();
+    //                 var obj=$(this);
+    //                 @guest
+    //                     window.location.href = "{{route('login')}}";
+    //                 @else
+    //                     var commentid=$(obj).attr('data-comment-id');
+    //                     $.ajax({
+    //                         url: "{{URL('/')}}/setCommentLike",
+    //                         type: 'post',
+    //                         data: {
+    //                             "_token": "{{ csrf_token() }}",
+    //                             'comment_id':commentid,
+    //                             'post_id':'{{ $post->id }}'
+    //                         },
+    //                         success: function(data){
+
+    //                             var response=data[1].split(":")[0];
+    //                             var count=data[1].split(":")[1];
+    //                             if(response=='liked'){
+    //                                 $(obj).find('i').attr('class', 'align-middle mr-2 fa fa-heart text-primary');
+    //                                 $('#comment_count_'+commentid).text(count);
+    //                             }else if(response=='dislike'){
+    //                                 $(obj).find('i').attr('class', 'align-middle mr-2 far fa-heart');
+    //                                 $('#comment_count_'+commentid).text(count);
+    //                             }
+    //                         }
+
+    //                     });
+    //                 @endguest
+    //             });
+
+    //             $('*[data-relay-to]').on('click',function(){
+    //                 var postid=$(this).attr('data-relay-to');
+    //                 var parentcomment=$(this).attr('data-parent');
+    //                 var message=$('#comment_reply_'+parentcomment).val();
+    //                 if(message.trim()!=""){
+    //                     $.ajax({
+    //                         type:"post",
+    //                         url:'{{URL('/')}}/setComment',
+    //                         data: {
+    //                             "_token": "{{ csrf_token() }}",
+    //                             'postid':postid,
+    //                             'comment':message,
+    //                             'p_comment':parentcomment
+    //                         },
+    //                         success: function(data){
+    //                             $('#comment_reply_'+parentcomment).val("");
+    //                             if(data=='success'){
+    //                                 getComments(postid);
+    //                             }
+    //                         }
+    //                     })
+    //                 }
+    //             });
+    //         }
+    //     })
+    // }
+
+    // const yourFunction = async () => {
+    //     await delay(2000);
+    // };
 
 
     //Likes
@@ -353,6 +504,12 @@ window.onload=function(){
         var url='mailto:?subject=Speekur&body='+title+',%0D%0A%0D%0ATo view the article please click the following link: '+link;
         window.open(url,'_blank');
     });
+
+
+    var interval=setInterval(function(){
+        getComments('{{$post->id}}');
+        clearInterval(interval);
+    },1000);
 }
 </script>
 @endsection

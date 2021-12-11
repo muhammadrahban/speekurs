@@ -20,7 +20,7 @@
                 @csrf
                 <div class="row m-0 align-items-center ">
                     <div class="col-12 mb-4 text-center">
-                        <img height="70" src="{{URL('/')}}/image/{{Auth::user()->image}}">
+                        <img height="70" src="{{URL('/')}}/{{Auth::user()->image}}">
                     </div>
                     <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('name') is-invalid @enderror">
                         <label>{{ __('Email') }}</label>

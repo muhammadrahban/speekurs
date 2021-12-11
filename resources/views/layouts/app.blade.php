@@ -41,6 +41,33 @@
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css ')}} ">
     <script src="https://kit.fontawesome.com/79e46b1496.js" crossorigin="anonymous"></script>
     <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
+    <script>
+        function timeSince(date) {
+            var seconds = Math.floor((new Date() - date) / 1000);
+            var interval = seconds / 31536000;
+
+            if (interval > 1) {
+            return Math.floor(interval) + " years";
+            }
+            interval = seconds / 2592000;
+            if (interval > 1) {
+            return Math.floor(interval) + " months";
+            }
+            interval = seconds / 86400;
+            if (interval > 1) {
+            return Math.floor(interval) + " days";
+            }
+            interval = seconds / 3600;
+            if (interval > 1) {
+            return Math.floor(interval) + " hours";
+            }
+            interval = seconds / 60;
+            if (interval > 1) {
+            return Math.floor(interval) + " minutes";
+            }
+            return Math.floor(seconds) + " seconds";
+        }
+    </script>
 </head>
 
 <body>
@@ -105,7 +132,7 @@
                                             <div class="profile-setting-box text-left">
                                                 <div class="dropdown ">
                                                     <a class="d-flex" role="button" type="button" class="btn" data-toggle="dropdown">
-                                                        <img class="mx-2" height="40" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
+                                                        <img class="mx-2" height="40" src="{{URL('/')}}/{{Auth::user()->image}}" alt="profile picture">
                                                         <div>
                                                             <span class="mb-0 font-weight-bold text-dark">{{ Auth::user()->name }}</span>
                                                             <small class="d-block text-dark">{{ Auth::user()->email }}</small>
@@ -188,7 +215,7 @@
                             </div>
                         @else
                             <a href="javascript:void(0)" class="profile-triger">
-                                <img height="40" class="avatar" src="{{URL('/')}}/image/{{Auth::user()->image}}" alt="profile picture">
+                                <img height="40" class="avatar" src="{{URL('/')}}/{{Auth::user()->image}}" alt="profile picture">
                                 <i class="fa fa-2x ml-2 align-middle fa-bars"></i>
                             </a>
                             <div class="profile-dropdown text-left">
@@ -370,7 +397,7 @@
     </div>
     <!-- JS
 ============================================ -->
-    
+
     <!-- Modernizer JS -->
     <script src="{{ asset('assets/front/js/vendor/modernizr-3.6.0.min.js ')}}"></script>
     <!-- jQuery JS -->
@@ -656,31 +683,7 @@
             });
         }
 
-        function timeSince(date) {
-            var seconds = Math.floor((new Date() - date) / 1000);
-            var interval = seconds / 31536000;
 
-            if (interval > 1) {
-            return Math.floor(interval) + " years";
-            }
-            interval = seconds / 2592000;
-            if (interval > 1) {
-            return Math.floor(interval) + " months";
-            }
-            interval = seconds / 86400;
-            if (interval > 1) {
-            return Math.floor(interval) + " days";
-            }
-            interval = seconds / 3600;
-            if (interval > 1) {
-            return Math.floor(interval) + " hours";
-            }
-            interval = seconds / 60;
-            if (interval > 1) {
-            return Math.floor(interval) + " minutes";
-            }
-            return Math.floor(seconds) + " seconds";
-        }
      </script>
 </body>
 
