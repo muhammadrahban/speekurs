@@ -40,7 +40,7 @@
     <!-- Main Style CSS -->
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css ')}} ">
     <script src="https://kit.fontawesome.com/79e46b1496.js" crossorigin="anonymous"></script>
-
+    <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
 </head>
 
 <body>
@@ -370,7 +370,7 @@
     </div>
     <!-- JS
 ============================================ -->
-    <script src="{{asset('assets/front/js/vendor/jquery-3.3.1.min.js')}}"></script>
+    
     <!-- Modernizer JS -->
     <script src="{{ asset('assets/front/js/vendor/modernizr-3.6.0.min.js ')}}"></script>
     <!-- jQuery JS -->

@@ -41,7 +41,6 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-12">
-                        <hr>
                         <small>Enter current password to confirm changes</small>
                     </div>
                     <div class="col-md-8">
@@ -54,25 +53,36 @@
                     </div>
                 </div>
             </form>
-            <form class="row shadow rounded bg-white" method="POST" action="{{ route('deactive') }}">
-                @csrf
-                    <div class="col-md-6">
-                        <div class="">
-                            <p class="m-0 ml-0 mr-auto">Deactivate your account</p>
-                        </div>
+            <div class="row align-items-center mb-3">
+                <div class="col-md-5"><h6>Deactivate your account</h6></div>
+                <div class="col-md-7"><hr class="my-0"></div>
+            </div>
+            <div class="p-2 bg-white rounded shadow ">
+                <form id="deactivate" class="row align-items-center" method="POST" action="{{ route('deactive') }}">
+                    @csrf
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" placeholder="Current Password" name="current_password" required>
                     </div>
-
-                    <div class="col-md-3">
-                        <input type="password" class="form-control mb-3" placeholder="Current Password" name="current_password" required>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-danger btn-block" data-dismiss="modal">Deactivate</button>
                     </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-danger btn-block mb-3" data-dismiss="modal">Deactivate</button>
+                    <div id="confirm" class="col-md-12 d-none">
+                        <div class="alert alert-danger mb-0 mt-2"><strong>Warning</strong> This action cannot be undone!</div>
                     </div>
-                </div>
-
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+<script>
+window.onload=function(){
+    $('#deactivate').on('submit',function(e){
+        if($('#deactivate').find('#confirm.d-none').length>0){
+            e.preventDefault();
+            $('#confirm').removeClass('d-none');
+        }
+    });
+}
+</script>
 @endsection
 

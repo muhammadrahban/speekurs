@@ -13,12 +13,13 @@
             <form method="POST" action="{{ route('setprofile') }}">
                 @csrf
                 <div class="row align-items-center mb-4">
-                    <div class="col-4 text-center text-md-left font-weight-bold text-primary">Remove Photo</div>
+                    <div id="removeImage" class="col-4 text-center text-md-left font-weight-bold text-primary">Remove Photo</div>
                     <div class="col-4 text-center">
-                        <img height="70" src="{{URL('/')}}/image/{{Auth::user()->image}}">
+                        <img id="avatar" height="70" src="{{URL('/')}}/image/{{Auth::user()->image}}">
+                        <input type="hidden" name="image">
                     </div>
-                    <div class="col-4 text-center text-md-right font-weight-bold text-primary">Change Photo</div>
-
+                    <button type="button" onclick="$(this).next('input').click();" class="col-4 text-center text-md-right font-weight-bold text-primary btn btn-transparent">Change Photo</button>
+                    <input type="file" hidden id="changeImage">
                 </div>
 
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('name') is-invalid @enderror">
@@ -31,15 +32,6 @@
                 </div>
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('dob') is-invalid @enderror">
                     <label>{{ __('Country') }}</label>
-                    <script>
-                        window.onload=function(){
-                            $('select[name="county"]').find('option').each(function(){
-                                if($(this).attr('value')=='{{Auth::user()->country}}'){
-                                    $(this).attr('selected',true);
-                                }
-                            });
-                        }
-                    </script>
                     <select class="form-control border-0 p-0" name="county" required >
                         <option value="Afganistan">Afghanistan</option>
                         <option value="Albania">Albania</option>
@@ -315,5 +307,53 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-lg imagecrop" id="model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Profile Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <img id="image" src="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary crop" id="crop">Crop</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.js"></script>
+<script>
+    $(document).ready(function(){
+        $('select[name="county"]').find('option').each(function(){
+            if($(this).attr('value')=='{{Auth::user()->country}}'){
+                $(this).attr('selected',true);
+            }
+        });
+    
+        $('#removeImage').on('click',function(){
+            $('#avatar').attr('src','{{URL('/')}}/image/user.png');
+            $('input[name="image"]').val('default');
+        });
+        $('#changeImage').on('change',function(e){
+            var reader = new FileReader();
+            reader.onload = function (j) {
+                $('input[name="image"]').val(j.target.result);
+                $('#avatar').attr('src', j.target.result);
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+    });
+</script>
 @endsection
 
