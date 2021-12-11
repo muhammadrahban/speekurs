@@ -41,31 +41,35 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-12">
+                        <hr>
                         <small>Enter current password to confirm changes</small>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <input type="password" class="form-control mb-3" placeholder="Current Password" name="current_password" required>
                     </div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-12">
-                        <hr>
-                        <div class="modal-footer shadow rounded bg-white">
-                            <p class="m-0 ml-0 mr-auto">Deactivate your account</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-12"><hr></div>
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block mb-3">
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary btn-block mb-3">
                             {{ __('Save Account') }}
                         </button>
                     </div>
+                </div>
+            </form>
+            <form class="row shadow rounded bg-white" method="POST" action="{{ route('deactive') }}">
+                @csrf
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-lg btn-danger btn-block mb-3" data-dismiss="modal">Deactivate</button>
+                        <div class="">
+                            <p class="m-0 ml-0 mr-auto">Deactivate your account</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="password" class="form-control mb-3" placeholder="Current Password" name="current_password" required>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-danger btn-block mb-3" data-dismiss="modal">Deactivate</button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>

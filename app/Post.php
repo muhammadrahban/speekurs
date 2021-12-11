@@ -34,4 +34,18 @@ class Post extends Model
     function commentUser(){
         return $this->hasManyThrough(User::class, Comment::class,  'post_id', 'id', 'id', 'id');
     }
+
+    function PostLike(){
+        return $this->hasOne(Like::class, 'post_id', 'id');
+    }
+
+    /**
+     * Get the CommentLike associated with the Post
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function CommentLike()
+    {
+        return $this->hasOne(Like::class, 'comment_id', 'id');
+    }
 }

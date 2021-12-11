@@ -7,7 +7,7 @@
                     @foreach ($data as $post)
                     <div class="card p-3">
                         <h5>{{$post->title}}</h5>
-                        <p class="my-2">{{$post->sub_title}}</p> 
+                        <p class="my-2">{{$post->sub_title}}</p>
                         <p>{{$post->created_at->diffForHumans()}}</p>
                         <div>
                             <figure>
@@ -21,11 +21,11 @@
                             <div class="d-felx w-100 mt-3">
                                 @guest
                                 <a class="post-icons mr-3">
-                                    <i class="chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart" data-post-id="{{$post->id}}" aria-hidden="true"></i>
-                                    <span id="count_{{$post->id}}">{{$post->like}}</span>
+                                    <i class="chosenHeartIcon align-middle mr-2 far fa-2x fa-heart" data-post-id="{{$post->id}}" aria-hidden="true"></i>
+                                    <span id="count_{{$post->id}}">{{$post->like->count()}}</span>
                                 </a>
                                 @else
-                                    @if ($post->isliked->count() > 0)
+                                    @if ($post->isliked!=null)
                                     <a class="post-icons mr-3">
                                         <i class="chosenHeartIcon align-middle mr-2 fa fa-2x fa-heart text-primary" data-post-id="{{$post->id}}" aria-hidden="true"></i>
                                         <span id="count_{{$post->id}}">{{$post->like}}</span>
@@ -39,7 +39,7 @@
                                 @endguest
                                 <a class="post-icons mr-3"><i class="align-middle mr-2 far fa-2x fa-comments" aria-hidden="true"></i><span>{{$post->comment->count()}}</span></a>
 
-                                @if ($post->bookmark)
+                                @if ($post->bookmark!=null)
                                     <a class="post-icons mr-3"><i class="chosenBookmarkIcon align-middle far fa-2x fa-bookmark text-primary" data-post-id="{{$post->id}}" aria-hidden="true"></i></a>
                                 @else
                                     <a class="post-icons mr-3"><i class="chosenBookmarkIcon align-middle far fa-2x fa-bookmark" data-post-id="{{$post->id}}" aria-hidden="true"></i></a>
@@ -49,7 +49,7 @@
                                 <a class="post-icons mr-3" data-share-link="{{URL('/').'/singlepost/'.$post->id}}" data-title="{{$post->title}}" data-image="{{asset($post->image)}}">
                                 @else
                                 <a class="post-icons mr-3" data-share-link="{{URL('/').'/singlepost/'.$post->id}}" data-title="{{$post->title}}" data-image="https://i.ytimg.com/vi/{{$post->image}}/hq720.jpg">
-                                @endif                                    
+                                @endif
                                     <i class="chosenShareIcon align-middle fa fa-2x fa-share" data-post-id="25" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -112,25 +112,29 @@ window.onload=function(){
             },
             success: function(data){
                 var build='';
+                console.log(data);
                 var currentParent="";
                 for(var i=0;i<data.length;i++){
                     if(data[i]['parent_comment_id']==0){
-                      
+
                         if(currentParent!=data[i]['parent_comment_id']){
                             currentParent=data[i]['parent_comment_id'];
-                            
+                                var icon='far fa-heart';
+                                if(data[i].isliked!=null){
+                                    icon='fa fa-heart text-primary';
+                                }
                                 build+='<div class="row mx-0 comment-parent">'+
                                         '<div class="comment-line"></div>'+
                                         '<div class="col-1 p-0">'+
                                             '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
-                                            
+
                                         '</div>'+
                                         '<div class="col-11 mb-3">'+
                                             '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
                                             '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                            '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="fa fa-heart"></i> <span>0</span></a> <a>Reply</a></div>'+
+                                            '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
                                         '</div>';
-                            
+
                         }else{
                             @guest
                             @else
@@ -147,21 +151,29 @@ window.onload=function(){
                                                 '</div>'+
                                             '</div></div>';
                                 }
+                                var icon='far fa-heart';
+                                if(data[i].isliked!=null){
+                                    icon='fa fa-heart text-primary';
+                                }
                                 build+='<div class="row mx-0 comment-parent">'+
                                     '<div class="comment-line"></div>'+
                                     '<div class="col-1 p-0">'+
                                         '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
-                                        
+
                                     '</div>'+
                                     '<div class="col-11 mb-3">'+
                                         '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
                                         '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                        '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="fa fa-heart"></i> <span>0</span></a> <a>Reply</a></div>'+
+                                        '<div class="text-muted "><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a> <a>Reply</a></div>'+
                                     '</div>';
                             @endguest
                         }
-                      
+
                     }else{
+                        var icon='far fa-heart';
+                        if(data[i].isliked!=null){
+                            icon='fa fa-heart text-primary';
+                        }
                         build+='<div class="child col-12 row mx-0 ml-4">'+
                                     '<div class="col-1 p-0">'+
                                         '<img height="30" class="avatar" src="{{URL('/')}}/image/'+data[i]['users'][0]['image']+'">'+
@@ -170,12 +182,44 @@ window.onload=function(){
                                     '<div class="col-11">'+
                                         '<p class="font-weight-bold mb-0">'+data[i]['users'][0]['name']+' <small class="text-muted">'+ timeSince(new Date(data[i]['created_at']))+'</small></p>'+
                                         '<p class="mb-0">'+data[i]['comment']+'</p>'+
-                                        '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="fa fa-heart"></i> <span>0</span></a></div>'+
+                                        '<div class="text-muted"><a data-comment-id="'+data[i]['id']+'"><i class="'+icon+'"></i> <span id="comment_count_'+data[i]['id']+'">'+data[i]['likecomment']+'</span></a></div>'+
                                     '</div>'+
                                 '</div>';
                     }
                 }
                 $('#comment_tree').html(build);
+                //Comment Likes
+                $('a[data-comment-id]').on('click', function(e) {
+
+                    e.preventDefault();
+                    var obj=$(this);
+                    @guest
+                        window.location.href = "{{route('login')}}";
+                    @else
+                        var commentid=$(obj).attr('data-comment-id');
+                        $.ajax({
+                            url: "{{URL('/')}}/setCommentLike",
+                            type: 'post',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'comment_id':commentid
+                            },
+                            success: function(data){
+
+                                var response=data[1].split(":")[0];
+                                var count=data[1].split(":")[1];
+                                if(response=='liked'){
+                                    $(obj).find('i').attr('class', 'align-middle mr-2 fa fa-heart text-primary');
+                                    $('#comment_count_'+commentid).text(count);
+                                }else if(response=='dislike'){
+                                    $(obj).find('i').attr('class', 'align-middle mr-2 far fa-heart');
+                                    $('#comment_count_'+commentid).text(count);
+                                }
+                            }
+
+                        });
+                    @endguest
+                });
 
                 $('*[data-relay-to]').on('click',function(){
                     var postid=$(this).attr('data-relay-to');
@@ -238,6 +282,7 @@ window.onload=function(){
             });
         @endguest
     });
+
     //Bookmark
     $('.chosenBookmarkIcon').on('click', function(e) {
         e.preventDefault();

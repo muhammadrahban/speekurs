@@ -44,14 +44,37 @@ class ProfileController extends Controller
         $user_id    = \Auth::user()->id;
         $user       = User::find($user_id);
         $this->validate($request, [
+            'email'                 => 'required',
             'current_password'      => 'required',
-            'password'              => 'required|min:6',
-            'password_confirmation' => 'required|same:new_password',
+            'password'              => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'required|min:6',
         ]);
+        $data['email']            =   $request->email;
+
+        if ($user->password) {
+            if (Hash::check($request->post('current_password'), $user->password)) {
+                $data['password']         =   Hash::make($request->password);
+                $user->update($data);
+                return redirect('/account')->with('success', 'profile saved!');
+            }else{
+                return redirect('/account')->with('error', 'Password Not Match!');
+            }
+        }else{
+            $user->update($data);
+            return redirect('/account')->with('success', 'profile saved!');
+        }
+    }
+
+    public function deactive(Request $request){
+        $user_id    = \Auth::user()->id;
+        $user       = User::find($user_id);
+        $this->validate($request, [
+            'current_password'      => 'required',
+        ]);
+
         if (Hash::check($request->post('current_password'), $user->password)) {
-            User::where('id', $user_id)->update([
-                'password' => Hash::make($request->input('password')),
-            ]);
+            $data['status']         =   '0';
+            $user->update($data);
             return redirect('/account')->with('success', 'profile saved!');
         }else{
             return redirect('/account')->with('error', 'Password Not Match!');

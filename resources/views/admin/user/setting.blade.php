@@ -15,11 +15,11 @@
             <div class="row px-3 px-md-0">
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('name') is-invalid @enderror">
                     <label>{{ __('Display Name') }}</label>
-                    <input type="name" class="form-control border-0 p-0" name="name" value="{{Auth::user()->name}}" required>
+                    <input type="name" class="form-control border-0 p-0" name="name" value="{{Auth::guard('admin')->user()->name}}" required>
                 </div>
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('email') is-invalid @enderror">
                     <label>{{ __('E-mail') }}</label>
-                    <input type="email" class="form-control border-0 p-0" name="email" value="{{Auth::user()->email}}" required>
+                    <input type="email" class="form-control border-0 p-0" name="email" value="{{Auth::guard('admin')->user()->email}}" required>
                 </div>
                 <div class="col-md-12 bg-white mb-3 py-2 rounded shadow @error('password') is-invalid @enderror">
                     <label>{{ __('Change Password') }} <small>Optional</small></label>
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        
-    </form>      
+
+    </form>
 </div>
 @endsection

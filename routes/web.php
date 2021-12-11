@@ -27,6 +27,7 @@ Route::get('/getpost/{cat}/{id}', 'WelcomeController@getPost');
 Route::get('/page/{slug}', 'WelcomeController@getPage');
 Route::get('/singlepost/{id}', 'WelcomeController@singlepost');
 Route::post('/setLike', 'WelcomeController@setLike');
+Route::post('/setCommentLike', 'WelcomeController@setCommentLike');
 Route::get('/search/{char}', 'WelcomeController@search');
 Route::post('/sebookmark', 'WelcomeController@sebookmark');
 Route::post('/setComment', 'WelcomeController@setComment');
@@ -41,6 +42,7 @@ Route::get('/setting', 'ProfileController@profile')->name('profile');
 Route::post('/setting', 'ProfileController@setprofile')->name('setprofile');
 Route::get('/account', 'ProfileController@account')->name('account');
 Route::post('/account', 'ProfileController@setaccount')->name('setaccount');
+Route::post('/deactive', 'ProfileController@deactive')->name('deactive');
 
 Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::namespace('Auth')->group(function(){
@@ -60,7 +62,7 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
     Route::get('/users', 'UserController@index')->name('admin.user.index');
     Route::get('/setting', 'UserController@setting')->name('admin.setting');
-    Route::post('/setting', 'UserController@setting')->name('admin.update.setting');
+    Route::post('/setting', 'UserController@setetting')->name('admin.update.setting');
     Route::get('/edit/{id}', 'UserController@edit')->name('admin.user.edit');
     Route::patch('/update/{id}', 'UserController@update')->name('admin.user.update');
     Route::get('/users/activity/{id}', 'UserController@getactivity')->name('admin.user.activity');

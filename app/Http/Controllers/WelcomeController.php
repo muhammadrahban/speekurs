@@ -79,7 +79,6 @@ class WelcomeController extends Controller
 
     public function setLike(Request $request){
         $user_id = Auth::user()->id;
-        // echo $user_id;exit;
         $posts = Like::where(
             ['post_id' => $request->post('postid'), 'user_id' => $user_id])->first();
 
@@ -99,6 +98,30 @@ class WelcomeController extends Controller
         }
         return response()->json(['response','error']);
     }
+
+    public function setCommentLike(Request $request){
+        $user_id = Auth::user()->id;
+        $posts = Like::where(
+            ['comment_id' => $request->post('comment_id'), 'user_id' => $user_id])->first();
+
+        if ($posts) {
+            $Like = Like::where(['comment_id' => $request->post('comment_id'),'user_id' => $user_id ])->first();
+            $Like->delete();
+
+            $count = Like::where(['comment_id' => $request->post('comment_id') ])->get()->count();
+            return response()->json(['response','dislike:'. $count]);
+        }else{
+            Like::create([
+                'user_id'   => $user_id,
+                'comment_id'   => $request->post('comment_id')
+            ]);
+            $count = Like::where(['comment_id' => $request->post('comment_id') ])->get()->count();
+            return response()->json(['response','liked:'. $count]);
+        }
+        return response()->json(['response','error']);
+    }
+
+
 
     public function sebookmark(Request $request){
         $user_id = Auth::user()->id;
@@ -157,31 +180,8 @@ class WelcomeController extends Controller
     }
 
     public function getComments(Request $request){
-        $comments  = Comment::where('post_id', $request->post('postid'))->with('users')->orderBy('mark')->get();
+        $comments  = Comment::with('users', 'isliked')->where('post_id', $request->post('postid'))->withCount('likeComment as likecomment')->orderBy('mark')->get();
         return response()->json($comments);
-    }
-
-    public function setCommentLike(Request $request){
-        $user_id    = Auth::user()->id;
-        if ($request->post('p_comment')) {
-            # code...
-        }else{
-            $posts      = Like::where(['comment_id' => $request->post('comment_id'), 'user_id' => $user_id])->first();
-            if($posts){
-                $Like   = Like::where(['comment_id' => $request->post('comment_id'),'user_id' => $user_id ])->first();
-                $Like->delete();
-                $count  = Like::where(['comment_id' => $request->post('comment_id') ])->get()->count();
-                return response()->json(['response','dislike:'. $count]);
-            }else{
-                Like::create([
-                    'user_id'       => $user_id,
-                    'comment_id'    => $request->post('comment_id')
-                ]);
-                $count = Like::where(['comment_id' => $request->post('comment_id') ])->get()->count();
-                return response()->json(['response','liked:'. $count]);
-            }
-            return response()->json(['response','error']);
-        }
     }
 
     public function search($char = ""){
